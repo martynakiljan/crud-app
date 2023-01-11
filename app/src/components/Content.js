@@ -21,13 +21,22 @@ const Content = () => {
     return <Avatar justify="center" src={avatar} />;
   };
 
-  const renderButtons = () => {
+  const removeElement = (e) => {
+    const elementToRemove = e.currentTarget.parentElement.parentElement;
+    elementToRemove.remove();
+  };
+
+  const renderButtons = (e) => {
     return (
       <>
         <Button variant="text" color="secondary">
           EDIT
         </Button>
-        <IconButton aria-label="delete" size="large">
+        <IconButton
+          aria-label="delete"
+          size="large"
+          onClick={(e) => removeElement(e)}
+        >
           <DeleteIcon fontSize="inherit" />
         </IconButton>
       </>
