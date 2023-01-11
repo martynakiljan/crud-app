@@ -28,7 +28,7 @@ const Content = () => {
 
   const renderButtons = (e) => {
     return (
-      <>
+      <div>
         <Button variant="text" color="secondary">
           EDIT
         </Button>
@@ -39,7 +39,7 @@ const Content = () => {
         >
           <DeleteIcon fontSize="inherit" />
         </IconButton>
-      </>
+      </div>
     );
   };
 
