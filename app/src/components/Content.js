@@ -13,8 +13,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Modal from "./Modal";
 
 const Content = () => {
+  const [open, setOpen] = React.useState(false);
   const users = React.useContext(Context);
 
   const renderMedia = (avatar) => {
@@ -51,9 +53,11 @@ const Content = () => {
           variant="outlined"
           size="medium"
           sx={{ mb: 7 }}
+          onClick={() => setOpen(true)}
         >
           CREATE NEW USER
         </Button>
+        <Modal open={open} setOpen={setOpen} />
       </Stack>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="medium" aria-label="a dense table">

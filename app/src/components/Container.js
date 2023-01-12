@@ -1,6 +1,7 @@
 import Typography from "@mui/material/Typography";
 import Content from "./Content";
 import styled from "styled-components";
+import Modal from "../components/Modal";
 
 const Container = () => {
   const Wrapper = styled.section`
@@ -13,6 +14,7 @@ const Container = () => {
         Users
       </Typography>
       <Content />
+      <Modal />
     </Wrapper>
   );
 };
