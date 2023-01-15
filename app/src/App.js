@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import getResponse from "./API/getUsers";
+import getUsers from "./API/getUsers";
 import Topbar from "./components/Topbar";
 import Container from "./components/Container";
 import Context from "./context";
@@ -9,7 +9,7 @@ const App = () => {
   const [data, setData] = React.useState(null);
 
   const getFetch = async () => {
-    const users = await getResponse();
+    const users = await getUsers();
     setData(users);
   };
 

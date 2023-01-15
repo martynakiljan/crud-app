@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import Content from "./Content";
+import Table from "./Table";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 
@@ -13,7 +13,7 @@ const Container = () => {
       <Typography variant="h4" component="h4">
         Users
       </Typography>
-      <Content />
+      <Table />
       <Modal />
     </Wrapper>
   );

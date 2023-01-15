@@ -1,3 +1,5 @@
+import updateTable from "../components/Table";
+
 const createNewUsers = async (fname, lname, username, email) => {
   console.log(fname, lname, username, email);
 
@@ -15,9 +17,15 @@ const createNewUsers = async (fname, lname, username, email) => {
 
   fetch("https://www.mecallapi.com/api/users/create", requestOptions)
     .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      return data;
+    .then((response) => {
+      const newUser = {
+        fname: fname,
+        lname: lname,
+        username: username,
+        email: email,
+        avatar: "https://www.mecallapi.com/users/cat.png",
+      };
+      return newUser;
     });
 };
 
