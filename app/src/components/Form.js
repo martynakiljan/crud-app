@@ -3,7 +3,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
 import styled from "styled-components";
 import FormLabel from "@mui/material/FormLabel";
-import CreateNewUsers from "../API/createNewUsers";
+import createNewUsers from "../API/createNewUsers";
 
 // const FormLabel = styled.label`
 //   width: 100%;
@@ -28,8 +28,6 @@ const Error = styled.p`
 `;
 
 const Form = () => {
-  // const [state, setstate] = useState({ data: "" });
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,18 +36,21 @@ const Form = () => {
   const [errorLastName, setHasErrorLastName] = useState(false);
   const [errorEmail, setHasErrorEmail] = useState(false);
 
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    // setEmail("");
-    // setFirstName("");
-    // setLastName(
-    // if (firstName === "") {
-    //   setHasErrorFirstName(true);
-    // } else {
-    //   setHasErrorFirstName(false);
-    // }
-  };
+    let formData = new FormData();
+    formData.append("firstName", lastName);
+    formData.append("lastName", firstName);
+    formData.append("email", email);
+
+    try {
+      const responseData = await createNewUsers(firstName, lastName, email);
+      console.log(responseData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit}>
