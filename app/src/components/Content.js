@@ -14,17 +14,23 @@ import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "./Modal";
+import createNewUsers from "../API/createNewUsers";
 
 const Content = () => {
   const [open, setOpen] = React.useState(false);
   const users = React.useContext(Context);
+
+  const test = createNewUsers();
+  console.log(test);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
   };
 
   const removeElement = (e) => {
-    const elementToRemove = e.currentTarget.parentElement.parentElement;
+    const elementToRemove =
+      e.currentTarget.parentElement.parentElement.parentElement;
+    console.log(elementToRemove);
     elementToRemove.remove();
   };
 
@@ -64,9 +70,9 @@ const Content = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell align="ight">Avatar</TableCell>
-              <TableCell align="ight">First</TableCell>
-              <TableCell align="ight">Last</TableCell>
+              <TableCell>Avatar</TableCell>
+              <TableCell>First</TableCell>
+              <TableCell>Last</TableCell>
               <TableCell>Username</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>

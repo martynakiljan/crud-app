@@ -1,10 +1,9 @@
 import React from "react";
 import "./App.css";
-import getResponse from "./utilis";
+import getResponse from "./API/getUsers";
 import Topbar from "./components/Topbar";
 import Container from "./components/Container";
 import Context from "./context";
-import Content from "./components/Content";
 
 const App = () => {
   const [data, setData] = React.useState(null);
