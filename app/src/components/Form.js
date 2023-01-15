@@ -30,6 +30,7 @@ const Error = styled.p`
 const Form = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
   const [errorFirstName, setHasErrorFirstName] = useState(false);
@@ -42,10 +43,16 @@ const Form = () => {
     let formData = new FormData();
     formData.append("firstName", lastName);
     formData.append("lastName", firstName);
+    formData.append("userNamem", userName);
     formData.append("email", email);
 
     try {
-      const responseData = await createNewUsers(firstName, lastName, email);
+      const responseData = await createNewUsers(
+        firstName,
+        lastName,
+        userName,
+        email
+      );
       console.log(responseData);
     } catch (error) {
       console.error(error);
@@ -74,6 +81,16 @@ const Form = () => {
             name="lastName"
             value={lastName}
             onChange={(event) => setLastName(event.target.value)}
+          />
+        </FormLabel>
+        <FormLabel>
+          Username:
+          <OutlinedInput
+            type="text"
+            id="userName"
+            name="userName"
+            value={userName}
+            onChange={(event) => setUsername(event.target.value)}
           />
         </FormLabel>
         {errorLastName ? <Error>Wpisz nazwisko</Error> : null}
