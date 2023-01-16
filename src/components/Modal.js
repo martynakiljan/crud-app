@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Transition } from "react-transition-group";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
+import {Modal, ModalDialog} from "@mui/joy";
 import Typography from "@mui/material/Typography";
 import Form from "./Form";
 
-export default function FadeModalDialog({ open, setOpen }) {
+const FadeModalDialog = ({ open, setOpen })  => {
   return (
     <>
       <Transition in={open} timeout={400}>
@@ -64,3 +63,5 @@ export default function FadeModalDialog({ open, setOpen }) {
     </>
   );
 }
+
+export default FadeModalDialog;

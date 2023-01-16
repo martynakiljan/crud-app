@@ -1,48 +1,16 @@
 import Context from "../context";
 import React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
+import {TableBody, Deletable, TableCell, TableContainer, TableHead, TableRow, Paper,Table, CircularProgress, Avatar, Stack, IconButton, Button, Cir} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Modal from "./Modal";
 import createNewUsers from "../API/createNewUsers";
 
 const TableContent = () => {
-  // const [newUser, setNewUser] = React.useState(null);
-
-  // const getNewUser = async () => {
-  //   const users = await createNewUsers();
-  //   setNewUser(newUser);
-  //   console.log(newUser);
-  //   console.log(users);
-  // };
-
-  // React.useEffect(() => {
-  //   getNewUser();
-  // }, []);
-
-  const [open, setOpen] = React.useState(false);
   const users = React.useContext(Context);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
   };
 
-  const removeElement = (e) => {
-    const elementToRemove =
-      e.currentTarget.parentElement.parentElement.parentElement;
-    console.log(elementToRemove);
-    elementToRemove.remove();
-  };
 
   const renderButtons = (e) => {
     return (
@@ -53,7 +21,6 @@ const TableContent = () => {
         <IconButton
           aria-label="delete"
           size="large"
-          onClick={(e) => removeElement(e)}
         >
           <DeleteIcon fontSize="inherit" />
         </IconButton>
@@ -63,18 +30,6 @@ const TableContent = () => {
 
   return users ? (
     <>
-      <Stack direction="row" justifyContent="end">
-        <Button
-          color="secondary"
-          variant="outlined"
-          size="medium"
-          sx={{ mb: 7 }}
-          onClick={() => setOpen(true)}
-        >
-          CREATE NEW USER
-        </Button>
-        <Modal open={open} setOpen={setOpen} />
-      </Stack>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="medium" aria-label="a dense table">
           <TableHead>

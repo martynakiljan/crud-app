@@ -1,18 +1,17 @@
 import FormControl from "@mui/joy/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import {OutlinedInput} from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
-import FormLabel from "@mui/material/FormLabel";
 import createNewUsers from "../API/createNewUsers";
 
-// const FormLabel = styled.label`
-//   width: 100%;
-//   font-size: 1.5rem;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding: 10px 0;
-// `;
+const FormLabel = styled.label`
+  width: 100%;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+`;
 
 const Button = styled.button`
   width: 100%;
@@ -73,6 +72,8 @@ const Form = () => {
           />
         </FormLabel>
         {errorFirstName ? <Error>Wpisz imie</Error> : null}
+        </FormControl>
+       <FormControl>
         <FormLabel>
           Last name:
           <OutlinedInput
@@ -83,6 +84,8 @@ const Form = () => {
             onChange={(event) => setLastName(event.target.value)}
           />
         </FormLabel>
+          </FormControl>
+                <FormControl>
         <FormLabel>
           Username:
           <OutlinedInput
@@ -94,6 +97,8 @@ const Form = () => {
           />
         </FormLabel>
         {errorLastName ? <Error>Wpisz nazwisko</Error> : null}
+              </FormControl>
+                    <FormControl>
         <FormLabel>
           Email:
           <OutlinedInput
@@ -105,10 +110,10 @@ const Form = () => {
           />
         </FormLabel>
         {errorEmail ? <Error>Wpisz email</Error> : null}
+              </FormControl>
         <Button variant="contained" type="submit" color="secondary">
           Submit
         </Button>
-      </FormControl>
     </form>
   );
 };
