@@ -1,4 +1,4 @@
-const getResponse = async () => {
+const fetchUsers= async () => {
   const API_URL = "https://www.melivecode.com/api/users";
 
   return await fetch(API_URL)
@@ -9,4 +9,4 @@ const getResponse = async () => {
     .catch((error) => console.warn(error));
 };
 
-export default getResponse;
+export default fetchUsers;
