@@ -1,8 +1,7 @@
 import Context from "../context";
 import React from "react";
-import {TableBody, Deletable, TableCell, TableContainer, TableHead, TableRow, Paper,Table, CircularProgress, Avatar, Stack, IconButton, Button, Cir} from "@mui/material";
+import {TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,Table, CircularProgress, Avatar, Stack, IconButton, Button, Cir} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import createNewUsers from "../API/createNewUsers";
 
 const TableContent = () => {
   const users = React.useContext(Context);
