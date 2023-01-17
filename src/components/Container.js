@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Modal from "../components/Modal";
 import { Stack, Typography, Button} from "@mui/material";
 
-
 const Wrapper = styled.section`
   padding: 4em;
 `;

@@ -1,3 +1,4 @@
+
 const fetchUsers = async () => {
   const API_URL = "https://www.melivecode.com/api/users";
 
