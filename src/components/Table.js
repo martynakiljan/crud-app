@@ -1,8 +1,20 @@
 import Context from "../context";
 import React from "react";
-import {TableBody, Deletable, TableCell, TableContainer, TableHead, TableRow, Paper,Table, CircularProgress, Avatar, Stack, IconButton, Button, Cir} from "@mui/material";
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Table,
+  CircularProgress,
+  Avatar,
+  Box,
+  IconButton,
+  Button,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import createNewUsers from "../API/createNewUsers";
 
 const TableContent = () => {
   const users = React.useContext(Context);
@@ -11,17 +23,13 @@ const TableContent = () => {
     return <Avatar justify="center" src={avatar} />;
   };
 
-
   const renderButtons = (e) => {
     return (
       <div>
         <Button variant="text" color="secondary">
           EDIT
         </Button>
-        <IconButton
-          aria-label="delete"
-          size="large"
-        >
+        <IconButton aria-label="delete" size="large">
           <DeleteIcon fontSize="inherit" />
         </IconButton>
       </div>
@@ -63,9 +71,9 @@ const TableContent = () => {
       </TableContainer>
     </>
   ) : (
-    <Stack sx={{ display: "flex" }} alignItems="center">
+    <Box display="flex" justifyContent="center" alignItems="center">
       <CircularProgress color="secondary" />
-    </Stack>
+    </Box>
   );
 };
 

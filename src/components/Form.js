@@ -1,5 +1,5 @@
 import FormControl from "@mui/joy/FormControl";
-import {OutlinedInput} from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 import createNewUsers from "../API/createNewUsers";
@@ -20,37 +20,66 @@ const Button = styled.button`
   background: transparent;
   padding: 5px 0;
   border: 1px solid #9c27b0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #9c27b0;
+    color: white;
+  }
 `;
 
 const Error = styled.p`
-  color: #9c27b0;
+  color: red;
 `;
 
-const Form = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+const defaultFormData = {
+  firstName: "",
+  lastName: "",
+  userName: "",
+  email: "",
+};
 
-  const [errorFirstName, setHasErrorFirstName] = useState(false);
-  const [errorLastName, setHasErrorLastName] = useState(false);
-  const [errorEmail, setHasErrorEmail] = useState(false);
+const defaultFormDataErrors = {
+  firstName: "",
+  lastName: "",
+  userName: "",
+  email: "",
+};
+
+const Form = () => {
+  const [formData, setFormData] = useState(defaultFormData);
+  const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
+
+  const validate = (name, value) => {
+    if (value === "") {
+      setFormDataErrors({
+        ...formDataErrors,
+        [name]: "Field is required.",
+      });
+    } else {
+      setFormDataErrors({
+        ...formDataErrors,
+        [name]: "",
+      });
+    }
+  };
+
+  const handleEdit = (name, value) => {
+    validate(name, value);
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    let formData = new FormData();
-    formData.append("firstName", lastName);
-    formData.append("lastName", firstName);
-    formData.append("userNamem", userName);
-    formData.append("email", email);
-
     try {
       const responseData = await createNewUsers(
-        firstName,
-        lastName,
-        userName,
-        email
+        formData.firstName,
+        formData.lastName,
+        formData.userName,
+        formData.email
       );
       console.log(responseData);
     } catch (error) {
@@ -59,7 +88,7 @@ const Form = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
           First name:
@@ -67,53 +96,58 @@ const Form = () => {
             type="text"
             id="firstName"
             name="firstName"
-            value={firstName}
-            onChange={(event) => setFirstName(event.target.value)}
+            value={formData.firstName}
+            onChange={(event) => handleEdit("firstName", event.target.value)}
           />
         </FormLabel>
-        {errorFirstName ? <Error>Wpisz imie</Error> : null}
-        </FormControl>
-       <FormControl>
+        {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
+      </FormControl>
+      <FormControl>
         <FormLabel>
           Last name:
           <OutlinedInput
             type="text"
             id="lastName"
             name="lastName"
-            value={lastName}
-            onChange={(event) => setLastName(event.target.value)}
+            value={formData.lastName}
+            onChange={(event) => handleEdit("lastName", event.target.value)}
           />
         </FormLabel>
-          </FormControl>
-                <FormControl>
+        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
+      </FormControl>
+      <FormControl>
         <FormLabel>
           Username:
           <OutlinedInput
             type="text"
             id="userName"
-            name="userName"
-            value={userName}
-            onChange={(event) => setUsername(event.target.value)}
+            value={formData.userName}
+            onChange={(event) => handleEdit("userName", event.target.value)}
           />
         </FormLabel>
-        {errorLastName ? <Error>Wpisz nazwisko</Error> : null}
-              </FormControl>
-                    <FormControl>
+      </FormControl>
+      {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
+      <FormControl>
         <FormLabel>
           Email:
           <OutlinedInput
             type="email"
             id="email"
             name="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            value={formData.email}
+            onChange={(event) => handleEdit("email", event.target.value)}
           />
         </FormLabel>
-        {errorEmail ? <Error>Wpisz email</Error> : null}
-              </FormControl>
-        <Button variant="contained" type="submit" color="secondary">
-          Submit
-        </Button>
+        {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
+      </FormControl>
+      <Button
+        variant="contained"
+        type="submit"
+        color="secondary"
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
     </form>
   );
 };
