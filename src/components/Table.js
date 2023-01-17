@@ -10,7 +10,7 @@ import {
   Table,
   CircularProgress,
   Avatar,
-  Stack,
+  Box,
   IconButton,
   Button,
 } from "@mui/material";
@@ -71,9 +71,9 @@ const TableContent = () => {
       </TableContainer>
     </>
   ) : (
-    <Stack sx={{ display: "flex" }} alignItems="center">
+    <Box display="flex" justifyContent="center" alignItems="center">
       <CircularProgress color="secondary" />
-    </Stack>
+    </Box>
   );
 };
 
