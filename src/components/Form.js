@@ -49,6 +49,7 @@ const defaultFormDataErrors = {
 const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
+  const [isValidationOK, setIsValidationOK] = useState(false);
 
   const validate = (name, value) => {
     if (value === "") {
@@ -56,35 +57,36 @@ const Form = () => {
         ...formDataErrors,
         [name]: "Field is required.",
       });
+      setIsValidationOK(false);
     } else {
       setFormDataErrors({
         ...formDataErrors,
         [name]: "",
       });
+      setIsValidationOK(true);
     }
   };
 
   const handleEdit = (name, value) => {
-    validate(name, value);
     setFormData({
       ...formData,
       [name]: value,
     });
+    validate(name, value);
   };
 
   async function handleSubmit(event) {
     event.preventDefault();
-    try {
+
+    if (isValidationOK) {
       const responseData = await createNewUsers(
         formData.firstName,
         formData.lastName,
         formData.userName,
         formData.email
       );
-      console.log(responseData);
-    } catch (error) {
-      console.error(error);
-    }
+      return responseData;
+    } 
   }
 
   return (
@@ -98,6 +100,7 @@ const Form = () => {
             name="firstName"
             value={formData.firstName}
             onChange={(event) => handleEdit("firstName", event.target.value)}
+            onFocus={(event) => validate("firstName", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
@@ -111,6 +114,7 @@ const Form = () => {
             name="lastName"
             value={formData.lastName}
             onChange={(event) => handleEdit("lastName", event.target.value)}
+            onFocus={(event) => validate("lastName", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
@@ -123,6 +127,7 @@ const Form = () => {
             id="userName"
             value={formData.userName}
             onChange={(event) => handleEdit("userName", event.target.value)}
+            onFocus={(event) => validate("userName", event.target.value)}
           />
         </FormLabel>
       </FormControl>
@@ -136,10 +141,12 @@ const Form = () => {
             name="email"
             value={formData.email}
             onChange={(event) => handleEdit("email", event.target.value)}
+            onFocus={(event) => validate("email", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
       </FormControl>
+    { !isValidationOK && <p>all fields must be filled out</p>}
       <Button
         variant="contained"
         type="submit"
