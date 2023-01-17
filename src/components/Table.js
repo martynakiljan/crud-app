@@ -2,7 +2,6 @@ import Context from "../context";
 import React from "react";
 import {
   TableBody,
-  DeleteIcon,
   TableCell,
   TableContainer,
   TableHead,
@@ -15,6 +14,7 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const TableContent = () => {
   const users = React.useContext(Context);
