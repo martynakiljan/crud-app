@@ -21,7 +21,6 @@ const Button = styled.button`
   padding: 5px 0;
   border: 1px solid #9c27b0;
   cursor: pointer;
-
   &:hover {
     background-color: #9c27b0;
     color: white;
@@ -49,21 +48,17 @@ const defaultFormDataErrors = {
 const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
-  const [isValidationOK, setIsValidationOK] = useState(false);
 
   const validate = (name, value) => {
+    console.log("teraz");
     if (value === "") {
       setFormDataErrors({
         ...formDataErrors,
         [name]: "Field is required.",
       });
-      setIsValidationOK(false);
+
+      console.log(...formDataErrors);
     } else {
-      setFormDataErrors({
-        ...formDataErrors,
-        [name]: "",
-      });
-      setIsValidationOK(true);
     }
   };
 
@@ -78,17 +73,19 @@ const Form = () => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (isValidationOK) {
-      const responseData = await createNewUsers(
-        formData.firstName,
-        formData.lastName,
-        formData.userName,
-        formData.email
-      );
-      return responseData;
-    } 
-  }
+    let name = event.target.name;
+    let val = event.target.value;
 
+    validate(name, val);
+
+    // const responseData = await createNewUsers(
+    //   formData.firstName,
+    //   formData.lastName,
+    //   formData.userName,
+    //   formData.email
+    // );
+    // return responseData;
+  }
   return (
     <form>
       <FormControl sx={{ width: "55ch" }}>
@@ -100,7 +97,6 @@ const Form = () => {
             name="firstName"
             value={formData.firstName}
             onChange={(event) => handleEdit("firstName", event.target.value)}
-            onFocus={(event) => validate("firstName", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
@@ -117,7 +113,6 @@ const Form = () => {
             onFocus={(event) => validate("lastName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -127,7 +122,6 @@ const Form = () => {
             id="userName"
             value={formData.userName}
             onChange={(event) => handleEdit("userName", event.target.value)}
-            onFocus={(event) => validate("userName", event.target.value)}
           />
         </FormLabel>
       </FormControl>
@@ -141,12 +135,10 @@ const Form = () => {
             name="email"
             value={formData.email}
             onChange={(event) => handleEdit("email", event.target.value)}
-            onFocus={(event) => validate("email", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
       </FormControl>
-    { !isValidationOK && <p>all fields must be filled out</p>}
       <Button
         variant="contained"
         type="submit"

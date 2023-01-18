@@ -1,6 +1,4 @@
 const createNewUsers = async (fname, lname, username, email) => {
-  console.log(fname, lname, username, email);
-
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -13,15 +11,14 @@ const createNewUsers = async (fname, lname, username, email) => {
     }),
   };
 
-
   fetch("https://www.mecallapi.com/api/users/create", requestOptions)
     .then((response) => response.json())
     .then((response) => {
-       console.log("Success:", response); 
+      console.log("Success:", response);
     })
-     .catch((error) => {
-     console.error('Error:', error);
-  });
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 };
 
 export default createNewUsers;
