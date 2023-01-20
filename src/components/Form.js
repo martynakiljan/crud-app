@@ -31,6 +31,10 @@ const Error = styled.p`
   color: red;
 `;
 
+const Message = styled.p`
+  color: green;
+`;
+
 const defaultFormData = {
   firstName: "",
   lastName: "",
@@ -48,19 +52,37 @@ const defaultFormDataErrors = {
 const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
+  const [message, setMessage] = useState(false);
 
   const validate = (name, value) => {
-    console.log("teraz");
     if (value === "") {
-      setFormDataErrors({
-        ...formDataErrors,
+      setFormDataErrors((prevState) => ({
+        ...prevState,
         [name]: "Field is required.",
-      });
-
-      console.log(...formDataErrors);
+      }));
     } else {
+      setFormDataErrors((prevState) => ({
+        ...prevState,
+        [name]: "",
+      }));
     }
   };
+
+  function addNewUser() {
+    createNewUsers(
+      formData.firstName,
+      formData.lastName,
+      formData.userName,
+      formData.email
+    );
+
+    setTimeout(() => {
+      setFormData(defaultFormData);
+      setMessage(false);
+    }, 1000);
+    //tu nie wiedzialam jak to ugryzc inaczej, bo resetowalo mi inputy i 
+    //dlatego odrazu setMessage nie wyswietlalo imienia i nazwiska bo puste stringi byly
+  }
 
   const handleEdit = (name, value) => {
     setFormData({
@@ -70,24 +92,25 @@ const Form = () => {
     validate(name, value);
   };
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
 
-    let name = event.target.name;
-    let val = event.target.value;
+    for (const [key, value] of Object.entries(formData)) {
+      validate(key, value);
+    }
 
-    validate(name, val);
+    Object.values(formData).every((value) => {
+      if (value !== "") {
+        setMessage(true);
+        return addNewUser();
+      }
+    });
 
-    // const responseData = await createNewUsers(
-    //   formData.firstName,
-    //   formData.lastName,
-    //   formData.userName,
-    //   formData.email
-    // );
-    // return responseData;
+    event.target.reset();
   }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
           First name:
@@ -110,9 +133,9 @@ const Form = () => {
             name="lastName"
             value={formData.lastName}
             onChange={(event) => handleEdit("lastName", event.target.value)}
-            onFocus={(event) => validate("lastName", event.target.value)}
           />
         </FormLabel>
+        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -124,8 +147,8 @@ const Form = () => {
             onChange={(event) => handleEdit("userName", event.target.value)}
           />
         </FormLabel>
+        {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
       </FormControl>
-      {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
       <FormControl>
         <FormLabel>
           Email:
@@ -139,12 +162,13 @@ const Form = () => {
         </FormLabel>
         {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
       </FormControl>
-      <Button
-        variant="contained"
-        type="submit"
-        color="secondary"
-        onClick={handleSubmit}
-      >
+      {message ? (
+        <Message>
+          successfully added user with firstname: {formData.firstName} and
+          lastname : {formData.lastName}
+        </Message>
+      ) : null}
+      <Button variant="contained" type="submit" color="secondary">
         Submit
       </Button>
     </form>
