@@ -1,5 +1,8 @@
 import React from "react";
 
-const contextModal = React.createContext({});
+const ContextModal = React.createContext({
+  open: false,
+  setOpen: () => {},
+});
 
-export default contextModal;
+export default ContextModal;

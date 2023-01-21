@@ -30,7 +30,6 @@ const Container = () => {
           </Button>
           <Modal open={open} setOpen={setOpen} />
         </Stack>
-        <Table />
         <Modal />
       </Wrapper>
     </Context.Provider>

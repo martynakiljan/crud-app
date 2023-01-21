@@ -11,7 +11,7 @@ import {
   validateUserName,
   errors,
 } from "../validate";
-import contextModal from "../contextModal";
+import ContextModal from "../contextModal";
 
 const FormLabel = styled.label`
   width: 100%;
@@ -52,7 +52,9 @@ const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [isValidForm, isSetValidForm] = useState(false);
 
-  const modal = useContext(contextModal);
+  const { open, setOpen } = useContext(ContextModal);
+
+  console.log(setOpen);
 
   const handleEdit = (name, value) => {
     validateForm();
@@ -85,8 +87,10 @@ const Form = () => {
         formData.userName,
         formData.email
       );
+
       isSetValidForm(true);
       setFormData(defaultFormData);
+      setOpen(false);
     } else {
       isSetValidForm(false);
     }

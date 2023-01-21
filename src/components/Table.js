@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const TableContent = () => {
   const users = React.useContext(Context);
-  console.log(users);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
