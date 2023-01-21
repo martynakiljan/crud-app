@@ -1,4 +1,4 @@
-import React from "react"; 
+import React from "react";
 import fetchUsers from "./API/fetchUsers";
 import Topbar from "./components/Topbar";
 import Container from "./components/Container";

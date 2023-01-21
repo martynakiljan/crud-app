@@ -11,7 +11,7 @@ import {
   validateUserName,
   errors,
 } from "../validate";
-import Context from "../context";
+import contextModal from "../contextModal";
 
 const FormLabel = styled.label`
   width: 100%;
@@ -49,10 +49,10 @@ const defaultFormData = {
 };
 
 const Form = () => {
-  const { setOpen } = useContext(Context);
-
   const [formData, setFormData] = useState(defaultFormData);
   const [isValidForm, isSetValidForm] = useState(false);
+
+  const modal = useContext(contextModal);
 
   const handleEdit = (name, value) => {
     validateForm();

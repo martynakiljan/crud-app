@@ -13,7 +13,7 @@ const Container = () => {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Context.Provider value={setOpen}>
+    <Context.Provider value={{ open, setOpen }}>
       <Wrapper>
         <Typography variant="h4" component="h4">
           Users

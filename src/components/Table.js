@@ -18,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const TableContent = () => {
   const users = React.useContext(Context);
+  console.log(users);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
@@ -51,7 +52,7 @@ const TableContent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map(({ id, avatar, fname, lname, username }) => (
+            {users?.map(({ id, avatar, fname, lname, username }) => (
               <TableRow
                 key={id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
