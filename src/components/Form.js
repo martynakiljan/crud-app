@@ -3,6 +3,13 @@ import { OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 import createNewUsers from "../API/createNewUsers";
+import {
+  validateFirstName,
+  validateLastName,
+  validateEmail,
+  validateUserName,
+  errors,
+} from "../validate";
 
 const FormLabel = styled.label`
   width: 100%;
@@ -28,7 +35,7 @@ const Button = styled.button`
   }
 `;
 
-const Error = styled.p`
+const Message = styled.p`
   color: red;
 `;
 
@@ -39,56 +46,48 @@ const defaultFormData = {
   email: "",
 };
 
-const defaultFormDataErrors = {
-  firstName: "",
-  lastName: "",
-  userName: "",
-  email: "",
-};
-
 const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
-  const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
-  const [isValidationOK, setIsValidationOK] = useState(false);
-
-  const validate = (name, value) => {
-    if (value === "") {
-      setFormDataErrors({
-        ...formDataErrors,
-        [name]: "Field is required.",
-      });
-      setIsValidationOK(false);
-    } else {
-      setFormDataErrors({
-        ...formDataErrors,
-        [name]: "",
-      });
-      setIsValidationOK(true);
-    }
-  };
+  const [isValidForm, isSetValidForm] = useState(false);
 
   const handleEdit = (name, value) => {
+    validateForm();
     setFormData({
       ...formData,
       [name]: value,
     });
-    validate(name, value);
   };
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
+    validateForm()
+  }
 
-    if (isValidationOK) {
-      const responseData = await createNewUsers(
+  const validateForm = () => {
+    const isFirstNameValid = validateFirstName(formData.firstName);
+    const isLastNameValid = validateLastName(formData.lastName);
+    const isEmailValid = validateEmail(formData.email);
+    const isUserNameValid = validateUserName(formData.userName);
+
+    if (
+      isFirstNameValid &&
+      isLastNameValid &&
+      isEmailValid &&
+      isUserNameValid
+    ) {
+      createNewUsers(
         formData.firstName,
         formData.lastName,
         formData.userName,
         formData.email
       );
-      return responseData;
-    } 
-  }
-
+      isSetValidForm(true);
+      setFormData(defaultFormData);
+    } else {
+      isSetValidForm(false);
+    }
+  };
+  
   return (
     <form>
       <FormControl sx={{ width: "55ch" }}>
@@ -100,10 +99,9 @@ const Form = () => {
             name="firstName"
             value={formData.firstName}
             onChange={(event) => handleEdit("firstName", event.target.value)}
-            onFocus={(event) => validate("firstName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
+        <Message>{errors.firstNameError} </Message>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -114,10 +112,9 @@ const Form = () => {
             name="lastName"
             value={formData.lastName}
             onChange={(event) => handleEdit("lastName", event.target.value)}
-            onFocus={(event) => validate("lastName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
+        <Message>{errors.lastNameError} </Message>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -127,26 +124,28 @@ const Form = () => {
             id="userName"
             value={formData.userName}
             onChange={(event) => handleEdit("userName", event.target.value)}
-            onFocus={(event) => validate("userName", event.target.value)}
           />
         </FormLabel>
+        <Message>{errors.userNameError} </Message>
       </FormControl>
-      {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
       <FormControl>
         <FormLabel>
           Email:
           <OutlinedInput
-            type="email"
+            type="text"
             id="email"
             name="email"
             value={formData.email}
             onChange={(event) => handleEdit("email", event.target.value)}
-            onFocus={(event) => validate("email", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
+        <Message>{errors.emailError} </Message>
       </FormControl>
-    { !isValidationOK && <p>all fields must be filled out</p>}
+      {isValidForm ? (
+        <p> form completed correctly!</p>
+      ) : (
+        <p>all fields must be filled out correctly</p>
+      )}
       <Button
         variant="contained"
         type="submit"
