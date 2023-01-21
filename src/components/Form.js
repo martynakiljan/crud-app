@@ -2,6 +2,7 @@ import FormControl from "@mui/joy/FormControl";
 import { OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
+import React, { useContext } from "react";
 import createNewUsers from "../API/createNewUsers";
 import {
   validateFirstName,
@@ -10,6 +11,7 @@ import {
   validateUserName,
   errors,
 } from "../validate";
+import Context from "../context";
 
 const FormLabel = styled.label`
   width: 100%;
@@ -47,6 +49,8 @@ const defaultFormData = {
 };
 
 const Form = () => {
+  const { setOpen } = useContext(Context);
+
   const [formData, setFormData] = useState(defaultFormData);
   const [isValidForm, isSetValidForm] = useState(false);
 
@@ -60,7 +64,7 @@ const Form = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    validateForm()
+    validateForm();
   }
 
   const validateForm = () => {
@@ -87,7 +91,7 @@ const Form = () => {
       isSetValidForm(false);
     }
   };
-  
+
   return (
     <form>
       <FormControl sx={{ width: "55ch" }}>
