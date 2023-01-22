@@ -54,8 +54,6 @@ const Form = () => {
 
   const { open, setOpen } = useContext(ContextModal);
 
-  console.log(setOpen);
-
   const handleEdit = (name, value) => {
     validateForm();
     setFormData({
@@ -87,10 +85,11 @@ const Form = () => {
         formData.userName,
         formData.email
       );
-
       isSetValidForm(true);
       setFormData(defaultFormData);
-      setOpen(false);
+
+      setOpen(false); // tutaj mi nie dodaje false, czemu? jest ciagle true, jak to nadpisac?
+      console.log(open);
     } else {
       isSetValidForm(false);
     }
