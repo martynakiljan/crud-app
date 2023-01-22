@@ -1,7 +1,5 @@
-import fetchUsers from "./fetchUsers";
-
 const createNewUsers = async (fname, lname, username, email) => {
-  console.log(fname, lname, username, email);
+
 
   const requestOptions = {
     method: "POST",
@@ -19,8 +17,8 @@ const createNewUsers = async (fname, lname, username, email) => {
   fetch("https://www.melivecode.com/api/users/create", requestOptions)
     .then((response) => response.json())
     .then((response) => {
-      return response;
       console.log("Success:", response);
+      return response;
     })
     .catch((error) => {
       console.error("Error:", error);

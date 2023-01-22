@@ -12,7 +12,7 @@ import {
   errors,
 } from "../validate";
 import ContextModal from "../contextModal";
-
+import SnackBar from "./Snackbar";
 const FormLabel = styled.label`
   width: 100%;
   font-size: 1.5rem;
@@ -51,6 +51,7 @@ const defaultFormData = {
 const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [isValidForm, isSetValidForm] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const { open, setOpen } = useContext(ContextModal);
 
@@ -87,9 +88,8 @@ const Form = () => {
       );
       isSetValidForm(true);
       setFormData(defaultFormData);
-
+      setOpenSnackbar(true);
       setOpen(false); // tutaj mi nie dodaje false, czemu? jest ciagle true, jak to nadpisac?
-      console.log(open);
     } else {
       isSetValidForm(false);
     }
@@ -97,6 +97,7 @@ const Form = () => {
 
   return (
     <form>
+      <SnackBar setOpenSnackbar={setOpenSnackbar} openSnackbar={openSnackbar} />
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
           First name:
