@@ -21,7 +21,6 @@ const Button = styled.button`
   padding: 5px 0;
   border: 1px solid #9c27b0;
   cursor: pointer;
-
   &:hover {
     background-color: #9c27b0;
     color: white;
@@ -30,6 +29,10 @@ const Button = styled.button`
 
 const Error = styled.p`
   color: red;
+`;
+
+const Message = styled.p`
+  color: green;
 `;
 
 const defaultFormData = {
@@ -49,22 +52,33 @@ const defaultFormDataErrors = {
 const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
-  const [isValidationOK, setIsValidationOK] = useState(false);
+  const [message, setMessage] = useState(false);
+  const [createResponse, setCreateResponse] = useState(null);
 
   const validate = (name, value) => {
     if (value === "") {
-      setFormDataErrors({
-        ...formDataErrors,
+      setFormDataErrors((prevState) => ({
+        ...prevState,
         [name]: "Field is required.",
-      });
-      setIsValidationOK(false);
+      }));
     } else {
-      setFormDataErrors({
-        ...formDataErrors,
+      setFormDataErrors((prevState) => ({
+        ...prevState,
         [name]: "",
-      });
-      setIsValidationOK(true);
+      }));
     }
+  };
+
+  const addNewUser = async () => {
+    const response = await createNewUsers(
+      formData.firstName,
+      formData.lastName,
+      formData.userName,
+      formData.email
+    );
+    console.log(response);
+    setCreateResponse(response);
+    setFormData(defaultFormData);
   };
 
   const handleEdit = (name, value) => {
@@ -75,22 +89,21 @@ const Form = () => {
     validate(name, value);
   };
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
 
-    if (isValidationOK) {
-      const responseData = await createNewUsers(
-        formData.firstName,
-        formData.lastName,
-        formData.userName,
-        formData.email
-      );
-      return responseData;
-    } 
-  }
+    for (const [key, value] of Object.entries(formData)) {
+      validate(key, value);
+    }
 
-  return (
-    <form>
+    let isFormValid = true;
+    Object.values(formData).every((value) => {
+      if (value === "") isFormValid = false;
+    });
+    if (isFormValid) addNewUser();
+  }
+  return !createResponse ? (
+    <form onSubmit={handleSubmit}>
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
           First name:
@@ -100,7 +113,6 @@ const Form = () => {
             name="firstName"
             value={formData.firstName}
             onChange={(event) => handleEdit("firstName", event.target.value)}
-            onFocus={(event) => validate("firstName", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
@@ -114,7 +126,6 @@ const Form = () => {
             name="lastName"
             value={formData.lastName}
             onChange={(event) => handleEdit("lastName", event.target.value)}
-            onFocus={(event) => validate("lastName", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
@@ -127,11 +138,10 @@ const Form = () => {
             id="userName"
             value={formData.userName}
             onChange={(event) => handleEdit("userName", event.target.value)}
-            onFocus={(event) => validate("userName", event.target.value)}
           />
         </FormLabel>
+        {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
       </FormControl>
-      {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
       <FormControl>
         <FormLabel>
           Email:
@@ -141,21 +151,16 @@ const Form = () => {
             name="email"
             value={formData.email}
             onChange={(event) => handleEdit("email", event.target.value)}
-            onFocus={(event) => validate("email", event.target.value)}
           />
         </FormLabel>
         {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
       </FormControl>
-    { !isValidationOK && <p>all fields must be filled out</p>}
-      <Button
-        variant="contained"
-        type="submit"
-        color="secondary"
-        onClick={handleSubmit}
-      >
+      <Button variant="contained" type="submit" color="secondary">
         Submit
       </Button>
     </form>
+  ) : (
+    <p> {createResponse.message}</p>
   );
 };
 
