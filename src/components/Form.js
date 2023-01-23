@@ -11,8 +11,7 @@ import {
   validateUserName,
   errors,
 } from "../validate";
-import ContextModal from "../contextModal";
-import SnackBar from "./Snackbar";
+
 const FormLabel = styled.label`
   width: 100%;
   font-size: 1.5rem;
@@ -30,15 +29,10 @@ const Button = styled.button`
   padding: 5px 0;
   border: 1px solid #9c27b0;
   cursor: pointer;
-
   &:hover {
     background-color: #9c27b0;
     color: white;
   }
-`;
-
-const Message = styled.p`
-  color: red;
 `;
 
 const defaultFormData = {
@@ -48,12 +42,43 @@ const defaultFormData = {
   email: "",
 };
 
-const Form = () => {
-  const [formData, setFormData] = useState(defaultFormData);
-  const [isValidForm, isSetValidForm] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+const defaultFormDataErrors = {
+  firstName: "",
+  lastName: "",
+  userName: "",
+  email: "",
+};
 
-  const { open, setOpen } = useContext(ContextModal);
+const Form = ({ setOpen }) => {
+  const [formData, setFormData] = useState(defaultFormData);
+  const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
+  const [createResponse, setCreateResponse] = useState(null);
+  const [isValidForm, isSetValidForm] = useState(false);
+
+  const validate = (name, value) => {
+    if (value === "") {
+      setFormDataErrors((prevState) => ({
+        ...prevState,
+        [name]: "Field is required.",
+      }));
+    } else {
+      setFormDataErrors((prevState) => ({
+        ...prevState,
+        [name]: "",
+      }));
+    }
+  };
+
+  const addNewUser = async () => {
+    const response = await createNewUsers(
+      formData.firstName,
+      formData.lastName,
+      formData.userName,
+      formData.email
+    );
+    setCreateResponse(response);
+    setFormData(defaultFormData);
+  };
 
   const handleEdit = (name, value) => {
     validateForm();
@@ -65,7 +90,16 @@ const Form = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    validateForm();
+
+    for (const [key, value] of Object.entries(formData)) {
+      validate(key, value);
+    }
+
+    let isFormValid = true;
+    Object.values(formData).every((value) => {
+      if (value === "") isFormValid = false;
+    });
+    if (isFormValid) addNewUser();
   }
 
   const validateForm = () => {
@@ -88,16 +122,14 @@ const Form = () => {
       );
       isSetValidForm(true);
       setFormData(defaultFormData);
-      setOpenSnackbar(true);
       setOpen(false); // tutaj mi nie dodaje false, czemu? jest ciagle true, jak to nadpisac?
     } else {
       isSetValidForm(false);
     }
   };
 
-  return (
-    <form>
-      <SnackBar setOpenSnackbar={setOpenSnackbar} openSnackbar={openSnackbar} />
+  return !createResponse ? (
+    <form onSubmit={handleSubmit}>
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
           First name:
@@ -109,7 +141,6 @@ const Form = () => {
             onChange={(event) => handleEdit("firstName", event.target.value)}
           />
         </FormLabel>
-        <Message>{errors.firstNameError} </Message>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -122,7 +153,6 @@ const Form = () => {
             onChange={(event) => handleEdit("lastName", event.target.value)}
           />
         </FormLabel>
-        <Message>{errors.lastNameError} </Message>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -134,7 +164,7 @@ const Form = () => {
             onChange={(event) => handleEdit("userName", event.target.value)}
           />
         </FormLabel>
-        <Message>{errors.userNameError} </Message>
+        {formDataErrors.userName && <p>{formDataErrors.userName}</p>}
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -147,23 +177,14 @@ const Form = () => {
             onChange={(event) => handleEdit("email", event.target.value)}
           />
         </FormLabel>
-        <Message>{errors.emailError} </Message>
       </FormControl>
-      {isValidForm ? (
-        <p> form completed correctly!</p>
-      ) : (
-        <p>all fields must be filled out correctly</p>
-      )}
-      <Button
-        variant="contained"
-        type="submit"
-        color="secondary"
-        onClick={handleSubmit}
-      >
+
+      <Button variant="contained" type="submit" color="secondary">
         Submit
       </Button>
     </form>
+  ) : (
+    <p> {createResponse.message}</p>
   );
 };
-
 export default Form;

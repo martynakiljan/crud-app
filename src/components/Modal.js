@@ -55,7 +55,8 @@ const FadeModalDialog = ({ open, setOpen }) => {
                 Edit User:
               </Typography>
 
-              <Form />
+              <Form 
+           setOpen={setOpen} />
             </ModalDialog>
           </Modal>
         )}

@@ -1,6 +1,4 @@
 const createNewUsers = async (fname, lname, username, email) => {
-
-
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -13,16 +11,15 @@ const createNewUsers = async (fname, lname, username, email) => {
     }),
   };
 
-
-  fetch("https://www.melivecode.com/api/users/create", requestOptions)
+  const createResponse = await fetch(
+    "https://www.melivecode.com/api/users/create",
+    requestOptions
+  )
     .then((response) => response.json())
     .then((response) => {
-      console.log("Success:", response);
       return response;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
     });
+  return createResponse;
 };
 
 export default createNewUsers;
