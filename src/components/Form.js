@@ -2,7 +2,15 @@ import FormControl from "@mui/joy/FormControl";
 import { OutlinedInput } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
+import React, { useContext } from "react";
 import createNewUsers from "../API/createNewUsers";
+import {
+  validateFirstName,
+  validateLastName,
+  validateEmail,
+  validateUserName,
+  errors,
+} from "../validate";
 
 const FormLabel = styled.label`
   width: 100%;
@@ -27,14 +35,6 @@ const Button = styled.button`
   }
 `;
 
-const Error = styled.p`
-  color: red;
-`;
-
-const Message = styled.p`
-  color: green;
-`;
-
 const defaultFormData = {
   firstName: "",
   lastName: "",
@@ -49,11 +49,11 @@ const defaultFormDataErrors = {
   email: "",
 };
 
-const Form = () => {
+const Form = ({ setOpen }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
-  const [message, setMessage] = useState(false);
   const [createResponse, setCreateResponse] = useState(null);
+  const [isValidForm, isSetValidForm] = useState(false);
 
   const validate = (name, value) => {
     if (value === "") {
@@ -76,17 +76,16 @@ const Form = () => {
       formData.userName,
       formData.email
     );
-    console.log(response);
     setCreateResponse(response);
     setFormData(defaultFormData);
   };
 
   const handleEdit = (name, value) => {
+    validateForm();
     setFormData({
       ...formData,
       [name]: value,
     });
-    validate(name, value);
   };
 
   function handleSubmit(event) {
@@ -102,6 +101,33 @@ const Form = () => {
     });
     if (isFormValid) addNewUser();
   }
+
+  const validateForm = () => {
+    const isFirstNameValid = validateFirstName(formData.firstName);
+    const isLastNameValid = validateLastName(formData.lastName);
+    const isEmailValid = validateEmail(formData.email);
+    const isUserNameValid = validateUserName(formData.userName);
+
+    if (
+      isFirstNameValid &&
+      isLastNameValid &&
+      isEmailValid &&
+      isUserNameValid
+    ) {
+      createNewUsers(
+        formData.firstName,
+        formData.lastName,
+        formData.userName,
+        formData.email
+      );
+      isSetValidForm(true);
+      setFormData(defaultFormData);
+      setOpen(false); // tutaj mi nie dodaje false, czemu? jest ciagle true, jak to nadpisac?
+    } else {
+      isSetValidForm(false);
+    }
+  };
+
   return !createResponse ? (
     <form onSubmit={handleSubmit}>
       <FormControl sx={{ width: "55ch" }}>
@@ -115,7 +141,6 @@ const Form = () => {
             onChange={(event) => handleEdit("firstName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -128,7 +153,6 @@ const Form = () => {
             onChange={(event) => handleEdit("lastName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -140,21 +164,21 @@ const Form = () => {
             onChange={(event) => handleEdit("userName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
+        {formDataErrors.userName && <p>{formDataErrors.userName}</p>}
       </FormControl>
       <FormControl>
         <FormLabel>
           Email:
           <OutlinedInput
-            type="email"
+            type="text"
             id="email"
             name="email"
             value={formData.email}
             onChange={(event) => handleEdit("email", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
       </FormControl>
+
       <Button variant="contained" type="submit" color="secondary">
         Submit
       </Button>
@@ -163,5 +187,4 @@ const Form = () => {
     <p> {createResponse.message}</p>
   );
 };
-
 export default Form;
