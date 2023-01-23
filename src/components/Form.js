@@ -53,6 +53,7 @@ const Form = () => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
   const [message, setMessage] = useState(false);
+  const [createResponse, setCreateResponse] = useState(null);
 
   const validate = (name, value) => {
     if (value === "") {
@@ -68,21 +69,17 @@ const Form = () => {
     }
   };
 
-  function addNewUser() {
-    createNewUsers(
+  const addNewUser = async () => {
+    const response = await createNewUsers(
       formData.firstName,
       formData.lastName,
       formData.userName,
       formData.email
     );
-
-    setTimeout(() => {
-      setFormData(defaultFormData);
-      setMessage(false);
-    }, 1000);
-    //tu nie wiedzialam jak to ugryzc inaczej, bo resetowalo mi inputy i 
-    //dlatego odrazu setMessage nie wyswietlalo imienia i nazwiska bo puste stringi byly
-  }
+    console.log(response);
+    setCreateResponse(response);
+    setFormData(defaultFormData);
+  };
 
   const handleEdit = (name, value) => {
     setFormData({
@@ -99,17 +96,13 @@ const Form = () => {
       validate(key, value);
     }
 
+    let isFormValid = true;
     Object.values(formData).every((value) => {
-      if (value !== "") {
-        setMessage(true);
-        return addNewUser();
-      }
+      if (value === "") isFormValid = false;
     });
-
-    event.target.reset();
+    if (isFormValid) addNewUser();
   }
-
-  return (
+  return !createResponse ? (
     <form onSubmit={handleSubmit}>
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
@@ -162,16 +155,12 @@ const Form = () => {
         </FormLabel>
         {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
       </FormControl>
-      {message ? (
-        <Message>
-          successfully added user with firstname: {formData.firstName} and
-          lastname : {formData.lastName}
-        </Message>
-      ) : null}
       <Button variant="contained" type="submit" color="secondary">
         Submit
       </Button>
     </form>
+  ) : (
+    <p> {createResponse.message}</p>
   );
 };
 
