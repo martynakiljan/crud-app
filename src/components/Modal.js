@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from "react";
 import { Transition } from "react-transition-group";
 import { Modal, ModalDialog } from "@mui/joy";
@@ -55,8 +57,7 @@ const FadeModalDialog = ({ open, setOpen }) => {
                 Edit User:
               </Typography>
 
-              <Form 
-           setOpen={setOpen} />
+              <Form open={open} setOpen={setOpen} />
             </ModalDialog>
           </Modal>
         )}

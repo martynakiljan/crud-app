@@ -1,3 +1,5 @@
+/** @format */
+
 export let errors = {
   firstNameError: "",
   lastNameError: "",

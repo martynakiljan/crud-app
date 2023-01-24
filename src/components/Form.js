@@ -1,8 +1,9 @@
+/** @format */
+
 import FormControl from "@mui/joy/FormControl";
-import { OutlinedInput } from "@mui/material";
+import { OutlinedInput, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import styled from "styled-components";
-import React, { useContext } from "react";
+import React from "react";
 import createNewUsers from "../API/createNewUsers";
 import {
   validateFirstName,
@@ -10,30 +11,8 @@ import {
   validateEmail,
   validateUserName,
   errors,
-} from "../validate";
-
-const FormLabel = styled.label`
-  width: 100%;
-  font-size: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  font-size: 1.5rem;
-  color: #9c27b0;
-  background: transparent;
-  padding: 5px 0;
-  border: 1px solid #9c27b0;
-  cursor: pointer;
-  &:hover {
-    background-color: #9c27b0;
-    color: white;
-  }
-`;
+} from "../utilis/validateEachInput";
+import { Error, Button, FormLabel } from "../utilis/styledcomponents";
 
 const defaultFormData = {
   firstName: "",
@@ -54,82 +33,96 @@ const Form = ({ setOpen }) => {
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
   const [createResponse, setCreateResponse] = useState(null);
   const [isValidForm, isSetValidForm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const validate = (name, value) => {
+  const validateWholeForm = (name, value) => {
     if (value === "") {
       setFormDataErrors((prevState) => ({
         ...prevState,
         [name]: "Field is required.",
       }));
+      isSetValidForm(false);
     } else {
       setFormDataErrors((prevState) => ({
         ...prevState,
         [name]: "",
       }));
+      isSetValidForm(true);
     }
   };
 
   const addNewUser = async () => {
-    const response = await createNewUsers(
-      formData.firstName,
-      formData.lastName,
-      formData.userName,
-      formData.email
-    );
-    setCreateResponse(response);
+    try {
+      setLoading(true);
+      const response = await createNewUsers(
+        formData.firstName,
+        formData.lastName,
+        formData.userName,
+        formData.email
+      );
+      setCreateResponse(response);
+      return response;
+    } catch {
+      setLoading(false);
+    }
     setFormData(defaultFormData);
   };
 
   const handleEdit = (name, value) => {
-    validateForm();
+    validateEachInput();
     setFormData({
       ...formData,
       [name]: value,
     });
+    validateWholeForm(name, value);
   };
 
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     for (const [key, value] of Object.entries(formData)) {
-      validate(key, value);
+      validateWholeForm(key, value);
     }
 
     let isFormValid = true;
     Object.values(formData).every((value) => {
       if (value === "") isFormValid = false;
     });
-    if (isFormValid) addNewUser();
-  }
+    if (isFormValid) {
+      addNewUser();
+    }
+  };
 
-  const validateForm = () => {
+  const validateEachInput = () => {
     const isFirstNameValid = validateFirstName(formData.firstName);
     const isLastNameValid = validateLastName(formData.lastName);
     const isEmailValid = validateEmail(formData.email);
     const isUserNameValid = validateUserName(formData.userName);
-
     if (
       isFirstNameValid &&
       isLastNameValid &&
       isEmailValid &&
       isUserNameValid
     ) {
-      createNewUsers(
-        formData.firstName,
-        formData.lastName,
-        formData.userName,
-        formData.email
-      );
+      addNewUser();
       isSetValidForm(true);
       setFormData(defaultFormData);
-      setOpen(false); // tutaj mi nie dodaje false, czemu? jest ciagle true, jak to nadpisac?
+
+      setTimeout(() => {
+        setOpen(false);
+        reloadPage();
+      }, 2000);
     } else {
       isSetValidForm(false);
     }
   };
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
   return !createResponse ? (
-    <form onSubmit={handleSubmit}>
+    <form>
       <FormControl sx={{ width: "55ch" }}>
         <FormLabel>
           First name:
@@ -141,6 +134,8 @@ const Form = ({ setOpen }) => {
             onChange={(event) => handleEdit("firstName", event.target.value)}
           />
         </FormLabel>
+        {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
+        <Error>{errors.firstNameError}</Error>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -153,6 +148,8 @@ const Form = ({ setOpen }) => {
             onChange={(event) => handleEdit("lastName", event.target.value)}
           />
         </FormLabel>
+        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
+        <Error>{errors.lastNameError}</Error>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -164,7 +161,8 @@ const Form = ({ setOpen }) => {
             onChange={(event) => handleEdit("userName", event.target.value)}
           />
         </FormLabel>
-        {formDataErrors.userName && <p>{formDataErrors.userName}</p>}
+        {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
+        <Error>{errors.userNameError}</Error>
       </FormControl>
       <FormControl>
         <FormLabel>
@@ -177,11 +175,21 @@ const Form = ({ setOpen }) => {
             onChange={(event) => handleEdit("email", event.target.value)}
           />
         </FormLabel>
+        {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
+        <Error>{errors.emailError}</Error>
       </FormControl>
-
-      <Button variant="contained" type="submit" color="secondary">
-        Submit
-      </Button>
+      {loading ? (
+        <CircularProgress color="secondary" />
+      ) : (
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          type="button"
+          color="secondary"
+        >
+          submit
+        </Button>
+      )}
     </form>
   ) : (
     <p> {createResponse.message}</p>
