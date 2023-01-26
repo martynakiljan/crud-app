@@ -1,7 +1,8 @@
 /** @format */
 
 import Context from "../utilis/context";
-import React from "react";
+
+import React, { useState } from "react";
 import {
   TableBody,
   TableCell,
@@ -17,6 +18,7 @@ import {
   Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import deleteUsers from "../API/deleteUsers";
 
 const TableContent = () => {
   const users = React.useContext(Context);
@@ -25,13 +27,34 @@ const TableContent = () => {
     return <Avatar justify="center" src={avatar} />;
   };
 
+  const getID = (e) => {
+    const tableRow = e.currentTarget.parentElement.parentElement.parentElement;
+    const id = tableRow.querySelector(".table-row-id").innerHTML;
+    deleteUsers(id);
+
+    getResponseFromAPI();
+  };
+
+  const [messageFromDeleteUserAPI, setMessageFromDataUserAPI] = useState(null);
+
+  const getResponseFromAPI = async () => {
+    const response = await deleteUsers();
+    setMessageFromDataUserAPI(response.message);
+    refreshPage();
+    return response;
+  };
+
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   const renderButtons = (e) => {
     return (
       <div>
         <Button variant="text" color="secondary">
           EDIT
         </Button>
-        <IconButton aria-label="delete" size="large">
+        <IconButton aria-label="delete" size="large" onClick={(e) => getID(e)}>
           <DeleteIcon fontSize="inherit" />
         </IconButton>
       </div>
@@ -58,14 +81,14 @@ const TableContent = () => {
                 key={id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" className="table-row-id">
                   {id}
                 </TableCell>
                 <TableCell align="right">{renderMedia(avatar)}</TableCell>
                 <TableCell align="left">{fname}</TableCell>
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
-                <TableCell align="left">{renderButtons()}</TableCell>
+                <TableCell align="left">{renderButtons(id)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

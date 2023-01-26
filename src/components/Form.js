@@ -74,7 +74,7 @@ const Form = ({ setOpen }) => {
       ...formData,
       [name]: value,
     });
-    validateWholeForm(name, value);
+    setFormDataErrors(defaultFormDataErrors);
   };
 
   const handleSubmit = (event) => {
@@ -107,11 +107,6 @@ const Form = ({ setOpen }) => {
       addNewUser();
       isSetValidForm(true);
       setFormData(defaultFormData);
-
-      setTimeout(() => {
-        setOpen(false);
-        reloadPage();
-      }, 2000);
     } else {
       isSetValidForm(false);
     }
@@ -119,6 +114,11 @@ const Form = ({ setOpen }) => {
 
   const reloadPage = () => {
     window.location.reload();
+  };
+  
+  const closeModal = () => {
+    setOpen(false);
+    reloadPage();
   };
 
   return !createResponse ? (
@@ -192,7 +192,17 @@ const Form = ({ setOpen }) => {
       )}
     </form>
   ) : (
-    <p> {createResponse.message}</p>
+    <>
+      <p> {createResponse.message}</p>
+      <Button
+        onClick={closeModal}
+        variant="contained"
+        type="button"
+        color="secondary"
+      >
+        OK
+      </Button>
+    </>
   );
 };
 export default Form;
