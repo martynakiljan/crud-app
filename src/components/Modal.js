@@ -3,10 +3,8 @@
 import React from "react";
 import { Transition } from "react-transition-group";
 import { Modal, ModalDialog } from "@mui/joy";
-import Typography from "@mui/material/Typography";
-import Form from "./Form";
 
-const FadeModalDialog = ({ open, setOpen }) => {
+const FadeModalDialog = ({ open, setOpen, children }) => {
   return (
     <>
       <Transition in={open} timeout={400}>
@@ -44,19 +42,7 @@ const FadeModalDialog = ({ open, setOpen }) => {
                 }[state],
               }}
             >
-              <Typography
-                id="fade-modal-dialog-title"
-                component="h2"
-                level="inherit"
-                fontSize="24px"
-                mb="0.25em"
-                color="secondary"
-                text-align="center"
-                width="100%"
-              >
-                Edit User:
-              </Typography>
-              <Form open={open} setOpen={setOpen} />
+              {children}
             </ModalDialog>
           </Modal>
         )}

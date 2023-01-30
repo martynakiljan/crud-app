@@ -11,7 +11,7 @@ import {
   validateEmail,
   validateUserName,
   errors,
-} from "../utilis/validateEachInput";
+} from "../utilis/validateInput";
 import { Error, Button, FormLabel } from "../utilis/styledcomponents";
 
 const defaultFormData = {
@@ -69,7 +69,7 @@ const Form = ({ setOpen }) => {
   };
 
   const handleEdit = (name, value) => {
-    validateEachInput();
+    validateInput(name);
     setFormData({
       ...formData,
       [name]: value,
@@ -93,29 +93,46 @@ const Form = ({ setOpen }) => {
     }
   };
 
-  const validateEachInput = () => {
-    const isFirstNameValid = validateFirstName(formData.firstName);
-    const isLastNameValid = validateLastName(formData.lastName);
-    const isEmailValid = validateEmail(formData.email);
-    const isUserNameValid = validateUserName(formData.userName);
-    if (
-      isFirstNameValid &&
-      isLastNameValid &&
-      isEmailValid &&
-      isUserNameValid
-    ) {
-      addNewUser();
-      isSetValidForm(true);
-      setFormData(defaultFormData);
-    } else {
-      isSetValidForm(false);
+  const validateInput = (name) => {
+    switch (name) {
+      case "firstName":
+        validateFirstName(formData.firstName);
+        break;
+      case "lastName":
+        validateLastName(formData.lastName);
+        break;
+      case "userName":
+        validateUserName(formData.userName);
+        break;
+      case "email":
+        validateEmail(formData.email);
+        break;
+      default:
+        break;
     }
+
+    // const isFirstNameValid = validateFirstName(formData.firstName);
+    // const isLastNameValid = validateLastName(formData.lastName);
+    // const isEmailValid = validateEmail(formData.email);
+    // const isUserNameValid = validateUserName(formData.userName);
+    // if (
+    //   isFirstNameValid &&
+    //   isLastNameValid &&
+    //   isEmailValid &&
+    //   isUserNameValid
+    // ) {
+    //   addNewUser();
+    //   isSetValidForm(true);
+    //   setFormData(defaultFormData);
+    // } else {
+    //   isSetValidForm(false);
+    // }
   };
 
   const reloadPage = () => {
     window.location.reload();
   };
-  
+
   const closeModal = () => {
     setOpen(false);
     reloadPage();

@@ -19,9 +19,12 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import deleteUsers from "../API/deleteUsers";
+import ModalRemoveUser from "./ModalRemoveUser";
 
 const TableContent = () => {
   const users = React.useContext(Context);
+  const [deleteUserResponse, setDeleteUserResponse] = useState(null);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
@@ -30,22 +33,14 @@ const TableContent = () => {
   const getID = (e) => {
     const tableRow = e.currentTarget.parentElement.parentElement.parentElement;
     const id = tableRow.querySelector(".table-row-id").innerHTML;
-    deleteUsers(id);
 
-    getResponseFromAPI();
+    getResponseFromAPI(id);
   };
 
-  const [messageFromDeleteUserAPI, setMessageFromDataUserAPI] = useState(null);
-
-  const getResponseFromAPI = async () => {
-    const response = await deleteUsers();
-    setMessageFromDataUserAPI(response.message);
-    refreshPage();
-    return response;
-  };
-
-  const refreshPage = () => {
-    window.location.reload();
+  const getResponseFromAPI = async (id) => {
+    const response = await deleteUsers(id);
+    setDeleteUserResponse(response);
+    setIsOpen(true);
   };
 
   const renderButtons = (e) => {
@@ -94,6 +89,13 @@ const TableContent = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {deleteUserResponse && (
+        <ModalRemoveUser
+          open={isOpen}
+          setOpen={setIsOpen}
+          response={deleteUserResponse}
+        />
+      )}
     </>
   ) : (
     <Box display="flex" justifyContent="center" alignItems="center">

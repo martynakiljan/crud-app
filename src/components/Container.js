@@ -3,8 +3,8 @@
 import Table from "./Table";
 import React from "react";
 import styled from "styled-components";
-import Modal from "../components/Modal";
 import { Stack, Typography, Button } from "@mui/material";
+import ModalAddUser from "./ModalAddUser";
 
 const Wrapper = styled.section`
   padding: 4em;
@@ -28,7 +28,7 @@ const Container = () => {
         >
           CREATE NEW USER
         </Button>
-        <Modal open={open} setOpen={setOpen} />
+        <ModalAddUser open={open} setOpen={setOpen} />
       </Stack>
       <Table />
     </Wrapper>

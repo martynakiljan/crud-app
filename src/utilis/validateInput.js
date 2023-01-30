@@ -1,3 +1,5 @@
+/** @format */
+
 export let errors = {
   firstNameError: "",
   lastNameError: "",
@@ -41,6 +43,7 @@ export const validateUserName = (username) => {
   for (let letter of username) {
     if (isNumber(letter)) {
       numbersCount++;
+      console.log(letter, numbersCount);
       continue;
     }
 

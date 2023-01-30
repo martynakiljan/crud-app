@@ -3,17 +3,13 @@
 import fetchUsers from "./fetchUsers";
 
 const deleteUsers = async (id) => {
-  let data = {
-    id: id,
-  };
-
   const requestOptions = {
     method: "DELETE",
     headers: {
       Accept: "application/form-data",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ id: id }),
   };
 
   const response = await fetch(
