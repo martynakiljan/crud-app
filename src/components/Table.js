@@ -91,8 +91,8 @@ const TableContent = () => {
       </TableContainer>
       {deleteUserResponse && (
         <ModalRemoveUser
-          open={isOpen}
-          setOpen={setIsOpen}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
           response={deleteUserResponse}
         />
       )}

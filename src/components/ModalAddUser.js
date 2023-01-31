@@ -4,9 +4,9 @@ import Typography from "@mui/material/Typography";
 import Form from "./Form";
 import Modal from "./Modal";
 
-const ModalAddUser = ({ open, setOpen }) => {
+const ModalAddUser = ({ isOpen, setIsOpen }) => {
   return (
-    <Modal open={open} setOpen={setOpen}>
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Typography
         id="fade-modal-dialog-title"
         component="h2"
@@ -19,7 +19,7 @@ const ModalAddUser = ({ open, setOpen }) => {
       >
         Edit User:
       </Typography>
-      <Form open={open} setOpen={setOpen} />
+      <Form isOpen={isOpen} setIsOpen={setIsOpen} />
     </Modal>
   );
 };

@@ -3,7 +3,7 @@
 import FormControl from "@mui/joy/FormControl";
 import { OutlinedInput, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import React from "react";
+import React, { useEffect } from "react";
 import createNewUsers from "../API/createNewUsers";
 import {
   validateFirstName,
@@ -28,7 +28,7 @@ const defaultFormDataErrors = {
   email: "",
 };
 
-const Form = ({ setOpen }) => {
+const Form = ({ setIsOpen }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
   const [createResponse, setCreateResponse] = useState(null);
@@ -69,7 +69,7 @@ const Form = ({ setOpen }) => {
   };
 
   const handleEdit = (name, value) => {
-    validateInput(name);
+    validateInput(name, value);
     setFormData({
       ...formData,
       [name]: value,
@@ -93,19 +93,19 @@ const Form = ({ setOpen }) => {
     }
   };
 
-  const validateInput = (name) => {
+  const validateInput = (name, value) => {
     switch (name) {
       case "firstName":
-        validateFirstName(formData.firstName);
+        validateFirstName(value);
         break;
       case "lastName":
-        validateLastName(formData.lastName);
+        validateLastName(value);
         break;
       case "userName":
-        validateUserName(formData.userName);
+        validateUserName(value);
         break;
       case "email":
-        validateEmail(formData.email);
+        validateEmail(value);
         break;
       default:
         break;
@@ -134,7 +134,7 @@ const Form = ({ setOpen }) => {
   };
 
   const closeModal = () => {
-    setOpen(false);
+    setIsOpen(false);
     reloadPage();
   };
 
@@ -203,6 +203,7 @@ const Form = ({ setOpen }) => {
           variant="contained"
           type="button"
           color="secondary"
+          disabled={!isValidForm}
         >
           submit
         </Button>

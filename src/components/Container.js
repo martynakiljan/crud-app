@@ -1,17 +1,10 @@
-/** @format */
-
 import Table from "./Table";
 import React from "react";
-import styled from "styled-components";
 import { Stack, Typography, Button } from "@mui/material";
 import ModalAddUser from "./ModalAddUser";
-
-const Wrapper = styled.section`
-  padding: 4em;
-`;
-
+import { Wrapper } from "../utilis/styledcomponents";
 const Container = () => {
-  const [open, setOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <Wrapper>
@@ -24,11 +17,11 @@ const Container = () => {
           variant="outlined"
           size="medium"
           sx={{ mb: 7 }}
-          onClick={() => setOpen(true)}
+          onClick={() => setIsOpen(true)}
         >
           CREATE NEW USER
         </Button>
-        <ModalAddUser open={open} setOpen={setOpen} />
+        <ModalAddUser isOpen={isOpen} setIsOpen={setIsOpen} />
       </Stack>
       <Table />
     </Wrapper>

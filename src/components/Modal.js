@@ -4,15 +4,15 @@ import React from "react";
 import { Transition } from "react-transition-group";
 import { Modal, ModalDialog } from "@mui/joy";
 
-const FadeModalDialog = ({ open, setOpen, children }) => {
+const FadeModalDialog = ({ isOpen, setIsOpen, children }) => {
   return (
     <>
-      <Transition in={open} timeout={400}>
+      <Transition in={isOpen} timeout={400}>
         {(state) => (
           <Modal
             keepMounted
             open={!["exited", "exiting"].includes(state)}
-            onClose={() => setOpen(false)}
+            onClose={() => setIsOpen(false)}
             slotProps={{
               backdrop: {
                 sx: {

@@ -10,6 +10,10 @@ export const FormLabel = styled.label`
   padding: 10px 0;
 `;
 
+export const Wrapper = styled.section`
+  padding: 4em;
+`;
+
 export const Button = styled.button`
   width: 100%;
   font-size: 1.5rem;
