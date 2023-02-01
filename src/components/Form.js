@@ -3,7 +3,7 @@
 import FormControl from "@mui/joy/FormControl";
 import { OutlinedInput, CircularProgress } from "@mui/material";
 import { useState } from "react";
-import React, { useEffect } from "react";
+import React from "react";
 import createNewUsers from "../API/createNewUsers";
 import {
   validateFirstName,
@@ -33,7 +33,9 @@ const Form = ({ setIsOpen }) => {
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
   const [createResponse, setCreateResponse] = useState(null);
   const [isValidForm, isSetValidForm] = useState(false);
+  const [isValidInputForm, isSetValidInputForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disabled, setIsDisabled] = useState(false);
 
   const validateWholeForm = (name, value) => {
     if (value === "") {
@@ -84,12 +86,21 @@ const Form = ({ setIsOpen }) => {
       validateWholeForm(key, value);
     }
 
-    let isFormValid = true;
-    Object.values(formData).every((value) => {
-      if (value === "") isFormValid = false;
+    Object.values(errors).every((value) => {
+      if (value.length === 0) {
+        isSetValidInputForm(true);
+        setIsDisabled(false);
+      } else {
+        isSetValidInputForm(false);
+        setIsDisabled(true);
+      }
     });
-    if (isFormValid) {
+
+    console.log(isValidForm, isValidInputForm);
+
+    if (isValidForm && isValidInputForm) {
       addNewUser();
+      setIsDisabled(false);
     }
   };
 
@@ -110,23 +121,6 @@ const Form = ({ setIsOpen }) => {
       default:
         break;
     }
-
-    // const isFirstNameValid = validateFirstName(formData.firstName);
-    // const isLastNameValid = validateLastName(formData.lastName);
-    // const isEmailValid = validateEmail(formData.email);
-    // const isUserNameValid = validateUserName(formData.userName);
-    // if (
-    //   isFirstNameValid &&
-    //   isLastNameValid &&
-    //   isEmailValid &&
-    //   isUserNameValid
-    // ) {
-    //   addNewUser();
-    //   isSetValidForm(true);
-    //   setFormData(defaultFormData);
-    // } else {
-    //   isSetValidForm(false);
-    // }
   };
 
   const reloadPage = () => {
@@ -203,7 +197,7 @@ const Form = ({ setIsOpen }) => {
           variant="contained"
           type="button"
           color="secondary"
-          disabled={!isValidForm}
+          // disabled={true}
         >
           submit
         </Button>

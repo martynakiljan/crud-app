@@ -1,14 +1,14 @@
 /** @format */
 
 import React from "react";
-import {Typography, Button} from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import Modal from "./Modal";
 
-const ModalRemoveUser = ({ open, setOpen, response }) => {
+const ModalRemoveUser = ({ isOpen, setIsOpen, response }) => {
   const { status, message } = response;
 
   return (
-    <Modal open={open} setOpen={setOpen}>
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Typography
         id="fade-modal-dialog-title"
         component="h2"
@@ -25,12 +25,12 @@ const ModalRemoveUser = ({ open, setOpen, response }) => {
         {status}: {message}
       </p>
       <Button
-        onClick={() =>  window.location.reload()}
+        onClick={() => window.location.reload()}
         variant="contained"
         type="button"
         color="secondary"
       >
-       OK
+        OK
       </Button>
     </Modal>
   );

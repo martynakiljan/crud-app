@@ -43,7 +43,6 @@ export const validateUserName = (username) => {
   for (let letter of username) {
     if (isNumber(letter)) {
       numbersCount++;
-      console.log(letter, numbersCount);
       continue;
     }
 
