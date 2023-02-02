@@ -1,10 +1,10 @@
 /** @format */
 
-import FormControl from "@mui/joy/FormControl";
-import { OutlinedInput, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useState } from "react";
 import React from "react";
 import createNewUsers from "../API/createNewUsers";
+import FormInput from "./FormInput";
 import {
   validateFirstName,
   validateLastName,
@@ -12,7 +12,8 @@ import {
   validateUserName,
   errors,
 } from "../utilis/validateInput";
-import { Error, Button, FormLabel } from "../utilis/styledcomponents";
+import { Button } from "../utilis/styledcomponents";
+import { inputs } from "../utilis/inputsArray";
 
 const defaultFormData = {
   firstName: "",
@@ -35,7 +36,7 @@ const Form = ({ setIsOpen }) => {
   const [isValidForm, isSetValidForm] = useState(false);
   const [isValidInputForm, isSetValidInputForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [disabled, setIsDisabled] = useState(false);
+  const [disabled, setIsDisabled] = useState(true);
 
   const validateWholeForm = (name, value) => {
     if (value === "") {
@@ -71,6 +72,8 @@ const Form = ({ setIsOpen }) => {
   };
 
   const handleEdit = (name, value) => {
+    console.log(name, value);
+
     validateInput(name, value);
     setFormData({
       ...formData,
@@ -96,11 +99,9 @@ const Form = ({ setIsOpen }) => {
       }
     });
 
-    console.log(isValidForm, isValidInputForm);
-
-    if (isValidForm && isValidInputForm) {
-      addNewUser();
+    if (isValidForm && !isValidInputForm) {
       setIsDisabled(false);
+      addNewUser();
     }
   };
 
@@ -134,61 +135,18 @@ const Form = ({ setIsOpen }) => {
 
   return !createResponse ? (
     <form>
-      <FormControl sx={{ width: "55ch" }}>
-        <FormLabel>
-          First name:
-          <OutlinedInput
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={(event) => handleEdit("firstName", event.target.value)}
-          />
-        </FormLabel>
-        {formDataErrors.firstName && <Error>{formDataErrors.firstName}</Error>}
-        <Error>{errors.firstNameError}</Error>
-      </FormControl>
-      <FormControl>
-        <FormLabel>
-          Last name:
-          <OutlinedInput
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={(event) => handleEdit("lastName", event.target.value)}
-          />
-        </FormLabel>
-        {formDataErrors.lastName && <Error>{formDataErrors.lastName}</Error>}
-        <Error>{errors.lastNameError}</Error>
-      </FormControl>
-      <FormControl>
-        <FormLabel>
-          Username:
-          <OutlinedInput
-            type="text"
-            id="userName"
-            value={formData.userName}
-            onChange={(event) => handleEdit("userName", event.target.value)}
-          />
-        </FormLabel>
-        {formDataErrors.userName && <Error>{formDataErrors.userName}</Error>}
-        <Error>{errors.userNameError}</Error>
-      </FormControl>
-      <FormControl>
-        <FormLabel>
-          Email:
-          <OutlinedInput
-            type="text"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={(event) => handleEdit("email", event.target.value)}
-          />
-        </FormLabel>
-        {formDataErrors.email && <Error>{formDataErrors.email}</Error>}
-        <Error>{errors.emailError}</Error>
-      </FormControl>
+      {inputs.map((input) => (
+        <FormInput
+          key={input.id}
+          text={input.text}
+          {...input}
+          errors={errors[input.id]}
+          name={input.name}
+          value={formData.name}
+          formDataErrors={formDataErrors[input.name]}
+          onChange={(event) => handleEdit(input.name, event.target.value)}
+        />
+      ))}
       {loading ? (
         <CircularProgress color="secondary" />
       ) : (

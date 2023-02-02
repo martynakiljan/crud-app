@@ -1,26 +1,26 @@
 /** @format */
 
 export let errors = {
-  firstNameError: "",
-  lastNameError: "",
-  userNameError: "",
-  emailError: "",
+  firstName: "",
+  lastName: "",
+  userName: "",
+  email: "",
 };
 
 export const validateFirstName = (fname) => {
   if (fname.length < 3) {
-    errors.firstNameError = "first name must have at least 3 characters";
+    errors.firstName = "first name must have at least 3 characters";
   } else {
-    errors.firstNameError = "";
+    errors.firstName = "";
     return true;
   }
 };
 
 export const validateLastName = (lname) => {
   if (lname.length < 3) {
-    errors.lastNameError = "last name must have at least 3 characters";
+    errors.lastName = "last name must have at least 3 characters";
   } else {
-    errors.lastNameError = "";
+    errors.lastName = "";
     return true;
   }
 };
@@ -55,28 +55,28 @@ export const validateUserName = (username) => {
   }
 
   if (username.length > 10) {
-    errors.userNameError = "usernmae is too long must be max 10 characters";
+    errors.userName = "usernmae is too long must be max 10 characters";
     return false;
   }
 
   if (containsSpecialChars) {
-    errors.userNameError = "username cannot contain special characters";
+    errors.userName = "username cannot contain special characters";
     return false;
   }
 
   if (numbersCount < 2) {
-    errors.userNameError = "username must contain at least 2 numbers";
+    errors.userName = "username must contain at least 2 numbers";
     return false;
   }
-  errors.userNameError = " ";
+  errors.userName = " ";
   return true;
 };
 
 export const validateEmail = (email) => {
   if (!new RegExp(/\S+@\S+\.\S+/).test(email)) {
-    errors.emailError = "invalid email";
+    errors.email = "invalid email";
   } else {
-    errors.emailError = "";
+    errors.email = "";
     return true;
   }
 };
