@@ -21,7 +21,6 @@ const deleteUsers = async (id) => {
       fetchUsers();
       return response;
     });
-  console.log(response);
   return response;
 };
 

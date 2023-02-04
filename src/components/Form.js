@@ -14,6 +14,7 @@ import {
 } from "../utilis/validateInput";
 import { Button } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
+import updateUser from "../API/updateUser";
 
 const defaultFormData = {
   firstName: "",
@@ -29,7 +30,7 @@ const defaultFormDataErrors = {
   email: "",
 };
 
-const Form = ({ setIsOpen }) => {
+const Form = ({ setIsOpen, updateUserResponseID }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
   const [createResponse, setCreateResponse] = useState(null);
@@ -72,12 +73,30 @@ const Form = ({ setIsOpen }) => {
   };
 
   const handleEdit = (name, value) => {
+    console.log(name, value);
     validateInput(name, value);
     setFormData({
       ...formData,
       [name]: value,
     });
     setFormDataErrors(defaultFormDataErrors);
+  };
+
+  const updateUserFun = async () => {
+    try {
+      setLoading(true);
+      const response = await updateUser(
+        formData.firstName,
+        formData.lastName,
+        formData.userName,
+        formData.email,
+        updateUserResponseID
+      );
+      setCreateResponse(response);
+      return response;
+    } catch {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -102,6 +121,10 @@ const Form = ({ setIsOpen }) => {
     if (isValidForm && isValidInputForm) {
       setIsDisabled(false);
       addNewUser();
+    }
+
+    if (updateUserResponseID) {
+      updateUserFun();
     }
   };
 
@@ -167,7 +190,7 @@ const Form = ({ setIsOpen }) => {
       <Button
         onClick={closeModal}
         variant="contained"
-        type="button"
+
         color="secondary"
       >
         OK

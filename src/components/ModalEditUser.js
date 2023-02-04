@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Form from "./Form";
 import Modal from "./Modal";
 
-const ModalAddUser = ({ isOpen, setIsOpen }) => {
+const ModalAddUser = ({ isOpen, setIsOpen, updateUserResponseID }) => {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Typography
@@ -18,9 +18,13 @@ const ModalAddUser = ({ isOpen, setIsOpen }) => {
         text-align="center"
         width="100%"
       >
-        Add User:
+        Edit User:
       </Typography>
-      <Form isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Form
+        updateUserResponseID={updateUserResponseID}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </Modal>
   );
 };

@@ -20,17 +20,20 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import deleteUsers from "../API/deleteUsers";
 import ModalRemoveUser from "./ModalRemoveUser";
+import ModalEditUser from "./ModalEditUser";
 
 const TableContent = () => {
   const users = React.useContext(Context);
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
+  const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
   };
 
-  const deletUser = (e, id) => {
+  const deleteUser = (id) => {
+    console.log(id);
     getResponseFromAPI(id);
   };
 
@@ -40,8 +43,9 @@ const TableContent = () => {
     setIsOpen(true);
   };
 
-  const updateUser = () => {
-
+  const updateUser = (id) => {
+    setUpdateUserResponseID(id);
+    setIsOpen(true);
   };
 
   //
@@ -91,14 +95,14 @@ const TableContent = () => {
                     <Button
                       variant="text"
                       color="secondary"
-                      onClick={(e) => updateUser(e, id)}
+                      onClick={() => updateUser(id)}
                     >
                       EDIT
                     </Button>
                     <IconButton
                       aria-label="delete"
                       size="large"
-                      onClick={(e) => deletUser(e, id)}
+                      onClick={() => deleteUser(id)}
                     >
                       <DeleteIcon fontSize="inherit" />
                     </IconButton>
@@ -116,6 +120,12 @@ const TableContent = () => {
           response={deleteUserResponse}
         />
       )}
+      <ModalEditUser
+        updateUserResponseID={updateUserResponseID}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        response={deleteUserResponse}
+      />
     </>
   ) : (
     <Box display="flex" justifyContent="center" alignItems="center">

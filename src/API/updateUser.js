@@ -1,37 +1,27 @@
-// /** @format */
+/** @format */
 
-// const deleteUsers = async (data) => {
-//   var data = {
-//     id: id,
-//     fname: fname,
-//     lname: lname,
-//     username: username,
-//     email: email,
-//     avatar: avatar,
-//   };
+const updateUser = async (fname, lname, username, email, id) => {
+  const requestOptions = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: id,
+      fname: fname,
+      lname: lname,
+      username: username,
+      email: email
+    }),
+  };
 
-//   const requestOptions = {
-//     method: "PUT",
-//     headers: {
-//       Accept: "application/form-data",
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(data),
-//   };
+  const createResponse = await fetch(
+    "https://www.melivecode.com/api/users/update",
+    requestOptions
+  )
+    .then((response) => response.json())
+    .then((response) => {
+      return response;
+    });
+  return createResponse;
+};
 
-//   const response = await fetch(
-//     "https://www.melivecode.com/api/users/update",
-//     requestOptions
-//   )
-//     .then((response) => response.json())
-//     .then((res) => res.json())
-//     .then((result) => {
-//       alert(result["message"]);
-//       if (result["status"] === "ok") {
-//         window.location.href = "/";
-//       }
-//     });
-//   return response;
-// };
-
-// export default deleteUsers;
+export default updateUser;
