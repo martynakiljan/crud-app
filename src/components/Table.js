@@ -30,10 +30,7 @@ const TableContent = () => {
     return <Avatar justify="center" src={avatar} />;
   };
 
-  const getID = (e) => {
-    const tableRow = e.currentTarget.parentElement.parentElement.parentElement;
-    const id = tableRow.querySelector(".table-row-id").innerHTML;
-
+  const deletUser = (e, id) => {
     getResponseFromAPI(id);
   };
 
@@ -43,18 +40,24 @@ const TableContent = () => {
     setIsOpen(true);
   };
 
-  const renderButtons = (e) => {
-    return (
-      <div>
-        <Button variant="text" color="secondary">
-          EDIT
-        </Button>
-        <IconButton aria-label="delete" size="large" onClick={(e) => getID(e)}>
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
-      </div>
-    );
+  const updateUser = () => {
+
   };
+
+  //
+  // const renderButtons = (e, id) => {
+  //   console.log(id);
+  //   return (
+  //     <div>
+  //       <Button variant="text" color="secondary" onClick={(e) => updateUser(e)}>
+  //         EDIT
+  //       </Button>
+  //       <IconButton aria-label="delete" size="large" onClick={(e) => getID(e)}>
+  //         <DeleteIcon fontSize="inherit" />
+  //       </IconButton>
+  //     </div>
+  //   );
+  // };
 
   return users ? (
     <>
@@ -83,7 +86,24 @@ const TableContent = () => {
                 <TableCell align="left">{fname}</TableCell>
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
-                <TableCell align="left">{renderButtons(id)}</TableCell>
+                <TableCell align="left">
+                  <div>
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      onClick={(e) => updateUser(e, id)}
+                    >
+                      EDIT
+                    </Button>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      onClick={(e) => deletUser(e, id)}
+                    >
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

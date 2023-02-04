@@ -72,8 +72,6 @@ const Form = ({ setIsOpen }) => {
   };
 
   const handleEdit = (name, value) => {
-    console.log(name, value);
-
     validateInput(name, value);
     setFormData({
       ...formData,
@@ -99,7 +97,9 @@ const Form = ({ setIsOpen }) => {
       }
     });
 
-    if (isValidForm && !isValidInputForm) {
+    console.log(isValidForm, isValidInputForm);
+
+    if (isValidForm && isValidInputForm) {
       setIsDisabled(false);
       addNewUser();
     }
