@@ -1,15 +1,32 @@
+/** @format */
+
 import React from "react";
 import fetchUsers from "./API/fetchUsers";
 import Topbar from "./components/Topbar";
 import Container from "./components/Container";
-import Context from "./context";
-import Table from "./components/Table";
+import Context from "./utilis/context";
+
+const defaultContext = {
+  firstName: "",
+  lastName: "",
+  userName: "",
+  email: "",
+};
+
 const App = () => {
-  const [data, setData] = React.useState(null);
+  const [users, setUsers] = React.useState(null);
+  const [formErrors, setFormErrors] = React.useState(defaultContext);
 
   const getFetch = async () => {
     const users = await fetchUsers();
-    setData(users);
+    setUsers(users);
+  };
+
+  const setFormErrorsWrapper = (name, value) => {
+    setFormErrors({
+      ...formErrors,
+      [name]: value,
+    });
   };
 
   React.useEffect(() => {
@@ -18,10 +35,9 @@ const App = () => {
 
   return (
     <>
-      <Context.Provider value={data}>
+      <Context.Provider value={{ users, formErrors, setFormErrorsWrapper }}>
         <Topbar position="static"></Topbar>
         <Container sx={{ minHeight: "100vh" }} />
-        <Table />
       </Context.Provider>
     </>
   );

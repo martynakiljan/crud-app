@@ -3,6 +3,7 @@ import { Typography, AppBar, Toolbar } from "@material-ui/core";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const Topbar = () => {
+  
   function refreshPage() {
     window.location.reload();
   }

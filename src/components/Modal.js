@@ -1,18 +1,18 @@
-import * as React from "react";
+/** @format */
+
+import React from "react";
 import { Transition } from "react-transition-group";
 import { Modal, ModalDialog } from "@mui/joy";
-import Typography from "@mui/material/Typography";
-import Form from "./Form";
 
-const FadeModalDialog = ({ open, setOpen }) => {
+const FadeModalDialog = ({ isOpen, setIsOpen, children }) => {
   return (
     <>
-      <Transition in={open} timeout={400}>
+      <Transition in={isOpen} timeout={400}>
         {(state) => (
           <Modal
             keepMounted
             open={!["exited", "exiting"].includes(state)}
-            onClose={() => setOpen(false)}
+            onClose={() => setIsOpen(false)}
             slotProps={{
               backdrop: {
                 sx: {
@@ -42,21 +42,7 @@ const FadeModalDialog = ({ open, setOpen }) => {
                 }[state],
               }}
             >
-              <Typography
-                id="fade-modal-dialog-title"
-                component="h2"
-                level="inherit"
-                fontSize="24px"
-                mb="0.25em"
-                color="secondary"
-                text-align="center"
-                width="100%"
-              >
-                Edit User:
-              </Typography>
-
-              <Form 
-           setOpen={setOpen} />
+              {children}
             </ModalDialog>
           </Modal>
         )}
