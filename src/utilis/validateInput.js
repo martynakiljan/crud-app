@@ -1,26 +1,18 @@
-/** @format */
 
-export let errors = {
-  firstName: "",
-  lastName: "",
-  userName: "",
-  email: "",
-};
-
-export const validateFirstName = (fname) => {
+export const validateFirstName = (fname, setFormErrors) => {
   if (fname.length < 3) {
-    errors.firstName = "first name must have at least 3 characters";
+    setFormErrors("firstName", "first name must have at least 3 characters");
   } else {
-    errors.firstName = "";
+    setFormErrors("firstName", "");
     return true;
   }
 };
 
-export const validateLastName = (lname) => {
+export const validateLastName = (lname, setFormErrors) => {
   if (lname.length < 3) {
-    errors.lastName = "last name must have at least 3 characters";
+    setFormErrors("lastName", "last name must have at least 3 characters");
   } else {
-    errors.lastName = "";
+    setFormErrors("lastName", "");
     return true;
   }
 };
@@ -33,7 +25,7 @@ function isNumber(n) {
   return !isNaN(n);
 }
 
-export const validateUserName = (username) => {
+export const validateUserName = (username, setFormErrors) => {
   // Liczba znaków numerycznych w 'username'.
   let numbersCount = 0;
 
@@ -55,28 +47,28 @@ export const validateUserName = (username) => {
   }
 
   if (username.length > 10) {
-    errors.userName = "usernmae is too long must be max 10 characters";
+    setFormErrors("userName", "usernmae is too long must be max 10 characters");
     return false;
   }
 
   if (containsSpecialChars) {
-    errors.userName = "username cannot contain special characters";
+    setFormErrors("userName", "username cannot contain special characters");
     return false;
   }
 
   if (numbersCount < 2) {
-    errors.userName = "username must contain at least 2 numbers";
+    setFormErrors("userName", "username must contain at least 2 numbers");
     return false;
   }
-  errors.userName = " ";
+  setFormErrors("userName", "");
   return true;
 };
 
-export const validateEmail = (email) => {
+export const validateEmail = (email, setFormErrors) => {
   if (!new RegExp(/\S+@\S+\.\S+/).test(email)) {
-    errors.email = "invalid email";
+    setFormErrors("email", "invalid email");
   } else {
-    errors.email = "";
+    setFormErrors("email", "");
     return true;
   }
 };

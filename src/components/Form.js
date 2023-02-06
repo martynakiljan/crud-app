@@ -1,10 +1,10 @@
 /** @format */
 
 import { CircularProgress } from "@mui/material";
-import { useState } from "react";
-import React from "react";
+import React, { useState, useContext } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
+import Context from "../utilis/context";
 import {
   validateFirstName,
   validateLastName,
@@ -23,37 +23,12 @@ const defaultFormData = {
   email: "",
 };
 
-const defaultFormDataErrors = {
-  firstName: "",
-  lastName: "",
-  userName: "",
-  email: "",
-};
-
 const Form = ({ setIsOpen, updateUserResponseID }) => {
   const [formData, setFormData] = useState(defaultFormData);
-  const [formDataErrors, setFormDataErrors] = useState(defaultFormDataErrors);
   const [createResponse, setCreateResponse] = useState(null);
-  const [isValidForm, isSetValidForm] = useState(false);
-  const [isValidInputForm, isSetValidInputForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [disabled, setIsDisabled] = useState(true);
 
-  const validateWholeForm = (name, value) => {
-    if (value === "") {
-      setFormDataErrors((prevState) => ({
-        ...prevState,
-        [name]: "Field is required.",
-      }));
-      isSetValidForm(false);
-    } else {
-      setFormDataErrors((prevState) => ({
-        ...prevState,
-        [name]: "",
-      }));
-      isSetValidForm(true);
-    }
-  };
+  const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
   const addNewUser = async () => {
     try {
@@ -73,13 +48,11 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
   };
 
   const handleEdit = (name, value) => {
-    console.log(name, value);
     validateInput(name, value);
-    setFormData({
+    setFormData((formData) => ({
       ...formData,
       [name]: value,
-    });
-    setFormDataErrors(defaultFormDataErrors);
+    }));
   };
 
   const updateUserFun = async () => {
@@ -99,27 +72,20 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     }
   };
 
+  const isValidForm = () => {
+    return Object.values(formErrors).every(
+      (currentValue) => currentValue === ""
+    );
+  };
+
+  const isEmptyForm = () => {
+    return Object.values(formData).every((currentValue) => currentValue === "");
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    for (const [key, value] of Object.entries(formData)) {
-      validateWholeForm(key, value);
-    }
-
-    Object.values(errors).every((value) => {
-      if (value.length === 0) {
-        isSetValidInputForm(true);
-        setIsDisabled(false);
-      } else {
-        isSetValidInputForm(false);
-        setIsDisabled(true);
-      }
-    });
-
-    console.log(isValidForm, isValidInputForm);
-
-    if (isValidForm && isValidInputForm) {
-      setIsDisabled(false);
+    if (isValidForm()) {
       addNewUser();
     }
 
@@ -131,16 +97,16 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
   const validateInput = (name, value) => {
     switch (name) {
       case "firstName":
-        validateFirstName(value);
+        validateFirstName(value, setFormErrorsWrapper);
         break;
       case "lastName":
-        validateLastName(value);
+        validateLastName(value, setFormErrorsWrapper);
         break;
       case "userName":
-        validateUserName(value);
+        validateUserName(value, setFormErrorsWrapper);
         break;
       case "email":
-        validateEmail(value);
+        validateEmail(value, setFormErrorsWrapper);
         break;
       default:
         break;
@@ -158,16 +124,14 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
 
   return !createResponse ? (
     <form>
-      {inputs.map((input) => (
+      {inputs.map(({ id, text, name }) => (
         <FormInput
-          key={input.id}
-          text={input.text}
-          {...input}
-          errors={errors[input.id]}
-          name={input.name}
+          key={id}
+          text={text}
+          name={name}
           value={formData.name}
-          formDataErrors={formDataErrors[input.name]}
-          onChange={(event) => handleEdit(input.name, event.target.value)}
+          formErrors={formErrors[name]}
+          onChange={(event) => handleEdit(name, event.target.value)}
         />
       ))}
       {loading ? (
@@ -178,7 +142,7 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
           variant="contained"
           type="button"
           color="secondary"
-          // disabled={true}
+          disabled={!isValidForm() || isEmptyForm()}
         >
           submit
         </Button>
@@ -187,12 +151,7 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
   ) : (
     <>
       <p> {createResponse.message}</p>
-      <Button
-        onClick={closeModal}
-        variant="contained"
-
-        color="secondary"
-      >
+      <Button onClick={closeModal} variant="contained" color="secondary">
         OK
       </Button>
     </>

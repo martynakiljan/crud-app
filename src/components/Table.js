@@ -2,7 +2,7 @@
 
 import Context from "../utilis/context";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   TableBody,
   TableCell,
@@ -23,7 +23,8 @@ import ModalRemoveUser from "./ModalRemoveUser";
 import ModalEditUser from "./ModalEditUser";
 
 const TableContent = () => {
-  const users = React.useContext(Context);
+  const { users } = useContext(Context);
+
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -48,20 +49,19 @@ const TableContent = () => {
     setIsOpen(true);
   };
 
-  //
-  // const renderButtons = (e, id) => {
-  //   console.log(id);
-  //   return (
-  //     <div>
-  //       <Button variant="text" color="secondary" onClick={(e) => updateUser(e)}>
-  //         EDIT
-  //       </Button>
-  //       <IconButton aria-label="delete" size="large" onClick={(e) => getID(e)}>
-  //         <DeleteIcon fontSize="inherit" />
-  //       </IconButton>
-  //     </div>
-  //   );
-  // };
+  const renderButtons = (id) => {
+    console.log(id);
+    return (
+      <div>
+        <Button variant="text" color="secondary" onClick={(e) => updateUser(e)}>
+          EDIT
+        </Button>
+        <IconButton aria-label="delete" size="large" onClick={(e) => deleteUser(e)}>
+          <DeleteIcon fontSize="inherit" />
+        </IconButton>
+      </div>
+    );
+  };
 
   return users ? (
     <>
@@ -90,24 +90,7 @@ const TableContent = () => {
                 <TableCell align="left">{fname}</TableCell>
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
-                <TableCell align="left">
-                  <div>
-                    <Button
-                      variant="text"
-                      color="secondary"
-                      onClick={() => updateUser(id)}
-                    >
-                      EDIT
-                    </Button>
-                    <IconButton
-                      aria-label="delete"
-                      size="large"
-                      onClick={() => deleteUser(id)}
-                    >
-                      <DeleteIcon fontSize="inherit" />
-                    </IconButton>
-                  </div>
-                </TableCell>
+                <TableCell align="left">{renderButtons(id)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

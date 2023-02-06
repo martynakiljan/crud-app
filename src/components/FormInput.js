@@ -5,12 +5,11 @@ import { OutlinedInput } from "@mui/material";
 
 const FormInput = ({
   type,
+  text,
   id,
   name,
   value,
-  formDataErrors,
-  errors,
-  text,
+formErrors,
   onChange,
 }) => {
   return (
@@ -25,8 +24,7 @@ const FormInput = ({
           onChange={onChange}
         />
       </FormLabel>
-      {formDataErrors && <Error>{formDataErrors}</Error>}
-      <Error>{errors}</Error>
+      {formErrors && <Error>{formErrors}</Error>}
     </FormControl>
   );
 };

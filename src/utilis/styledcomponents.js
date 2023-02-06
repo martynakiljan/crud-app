@@ -26,6 +26,12 @@ export const Button = styled.button`
     background-color: #9c27b0;
     color: white;
   }
+
+  &:disabled {
+    background-color: dimgrey;
+    color: #e8e8e8;
+    cursor: default;
+  }
 `;
 
 export const Error = styled.p`
