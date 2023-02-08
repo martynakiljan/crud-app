@@ -21,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import deleteUsers from "../API/deleteUsers";
 import ModalRemoveUser from "./ModalRemoveUser";
 import ModalEditUser from "./ModalEditUser";
+import ModalAlert from "./ModalAlert";
 
 const TableContent = () => {
   const { users } = useContext(Context);
@@ -28,13 +29,13 @@ const TableContent = () => {
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenAlert, setIsOpenAlert] = React.useState(false);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
   };
 
   const deleteUser = (id) => {
-    console.log(id);
     getResponseFromAPI(id);
   };
 
@@ -45,23 +46,32 @@ const TableContent = () => {
   };
 
   const updateUser = (id) => {
-    setUpdateUserResponseID(id);
-    setIsOpen(true);
+    console.log(id);
+    if (id < 12) {
+      setIsOpenAlert(true);
+    } else {
+      setUpdateUserResponseID(id);
+      setIsOpen(true);
+    }
   };
 
-  const renderButtons = (id) => {
-    console.log(id);
-    return (
-      <div>
-        <Button variant="text" color="secondary" onClick={(e) => updateUser(e)}>
-          EDIT
-        </Button>
-        <IconButton aria-label="delete" size="large" onClick={(e) => deleteUser(e)}>
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
-      </div>
-    );
-  };
+  // const renderButtons = (id) => {
+  //w dalszym ciagu nie dziala
+  //   return (
+  //     <div>
+  //       <Button variant="text" color="secondary" onClick={() => updateUser()}>
+  //         EDIT
+  //       </Button>
+  //       <IconButton
+  //         aria-label="delete"
+  //         size="large"
+  //         onClick={() => deleteUser()}
+  //       >
+  //         <DeleteIcon fontSize="inherit" />
+  //       </IconButton>
+  //     </div>
+  //   );
+  // };
 
   return users ? (
     <>
@@ -90,7 +100,25 @@ const TableContent = () => {
                 <TableCell align="left">{fname}</TableCell>
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
-                <TableCell align="left">{renderButtons(id)}</TableCell>
+                <TableCell align="left">
+                  {/* {renderButtons(id)} */}
+                  <div>
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      onClick={() => updateUser(id)}
+                    >
+                      EDIT
+                    </Button>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      onClick={() => deleteUser(id)}
+                    >
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -109,6 +137,7 @@ const TableContent = () => {
         setIsOpen={setIsOpen}
         response={deleteUserResponse}
       />
+      <ModalAlert isOpen={isOpenAlert} setIsOpen={setIsOpenAlert} />
     </>
   ) : (
     <Box display="flex" justifyContent="center" alignItems="center">

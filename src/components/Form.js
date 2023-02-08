@@ -10,7 +10,6 @@ import {
   validateLastName,
   validateEmail,
   validateUserName,
-  errors,
 } from "../utilis/validateInput";
 import { Button } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
