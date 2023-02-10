@@ -30,6 +30,7 @@ const TableContent = () => {
   const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [isOpenAlert, setIsOpenAlert] = React.useState(false);
+  const [userData, setUserData] = React.useState();
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
@@ -45,8 +46,8 @@ const TableContent = () => {
     setIsOpen(true);
   };
 
-  const updateUser = (id) => {
-    console.log(id);
+  const updateUser = (id, fname, lname, username) => {
+    setUserData({ fname, lname, username });
     if (id < 12) {
       setIsOpenAlert(true);
     } else {
@@ -55,23 +56,26 @@ const TableContent = () => {
     }
   };
 
-  // const renderButtons = (id) => {
-  //w dalszym ciagu nie dziala
-  //   return (
-  //     <div>
-  //       <Button variant="text" color="secondary" onClick={() => updateUser()}>
-  //         EDIT
-  //       </Button>
-  //       <IconButton
-  //         aria-label="delete"
-  //         size="large"
-  //         onClick={() => deleteUser()}
-  //       >
-  //         <DeleteIcon fontSize="inherit" />
-  //       </IconButton>
-  //     </div>
-  //   );
-  // };
+  const renderButtons = (id, avatar, fname, lname, email, username) => {
+    return (
+      <div>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() => updateUser(id, avatar, fname, lname, email, username)}
+        >
+          EDIT
+        </Button>
+        <IconButton
+          aria-label="delete"
+          size="large"
+          onClick={() => deleteUser()}
+        >
+          <DeleteIcon fontSize="inherit" />
+        </IconButton>
+      </div>
+    );
+  };
 
   return users ? (
     <>
@@ -101,23 +105,7 @@ const TableContent = () => {
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
                 <TableCell align="left">
-                  {/* {renderButtons(id)} */}
-                  <div>
-                    <Button
-                      variant="text"
-                      color="secondary"
-                      onClick={() => updateUser(id)}
-                    >
-                      EDIT
-                    </Button>
-                    <IconButton
-                      aria-label="delete"
-                      size="large"
-                      onClick={() => deleteUser(id)}
-                    >
-                      <DeleteIcon fontSize="inherit" />
-                    </IconButton>
-                  </div>
+                  {renderButtons(id, fname, lname, username)}
                 </TableCell>
               </TableRow>
             ))}
@@ -136,6 +124,7 @@ const TableContent = () => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         response={deleteUserResponse}
+        userData={userData}
       />
       <ModalAlert isOpen={isOpenAlert} setIsOpen={setIsOpenAlert} />
     </>

@@ -22,13 +22,15 @@ const defaultFormData = {
   email: "",
 };
 
-const Form = ({ setIsOpen, updateUserResponseID }) => {
-  const [formData, setFormData] = useState(defaultFormData);
+const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
+  const [formData, setFormData] = useState(userData || defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
+  console.log(userData);
+  
   const addNewUser = async () => {
     try {
       setLoading(true);
