@@ -42,7 +42,7 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
       }
       console.log(formData);
     }
-  }, []);
+  }, [userData]);
 
   const addNewUser = async () => {
     try {
