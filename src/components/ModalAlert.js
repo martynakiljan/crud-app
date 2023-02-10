@@ -1,7 +1,7 @@
 /** @format */
 
 import React from "react";
-import Typography from "@mui/material/Typography";
+import { Typography, Button } from "@mui/material";
 import Modal from "./Modal";
 
 const ModalAlert = ({ isOpen, setIsOpen }) => {
@@ -19,6 +19,14 @@ const ModalAlert = ({ isOpen, setIsOpen }) => {
       >
         unfortunately you can't edit users with id 1-12
       </Typography>
+      <Button
+        onClick={() => window.location.reload()}
+        variant="contained"
+        type="button"
+        color="secondary"
+      >
+        OK
+      </Button>
     </Modal>
   );
 };

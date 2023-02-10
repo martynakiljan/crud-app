@@ -1,7 +1,7 @@
 /** @format */
 
 import { CircularProgress } from "@mui/material";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
 import Context from "../utilis/context";
@@ -23,14 +23,27 @@ const defaultFormData = {
 };
 
 const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
-  const [formData, setFormData] = useState(userData || defaultFormData);
+  const [formData, setFormData] = useState(defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
-  console.log(userData);
-  
+  useEffect(() => {
+    if (typeof userData !== "undefined") {
+      console.log("ok");
+      for (const [key, value] of Object.entries(userData)) {
+        setFormData(() => ({
+          firstName: value,
+          lastName: value,
+          userName: value,
+          email: value,
+        }));
+      }
+      console.log(formData);
+    }
+  }, []);
+
   const addNewUser = async () => {
     try {
       setLoading(true);
