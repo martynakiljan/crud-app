@@ -30,15 +30,15 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
   useEffect(() => {
-    if (typeof userData !== "undefined") {
-      console.log("ok");
+    if (userData) {
       for (const [key, value] of Object.entries(userData)) {
-        setFormData(() => ({
+        const newDataForm = {
           firstName: value,
           lastName: value,
           userName: value,
           email: value,
-        }));
+        };
+        setFormData(newDataForm);
       }
       console.log(formData);
     }
@@ -58,7 +58,6 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
     } catch {
       setLoading(false);
     }
-    setFormData(defaultFormData);
   };
 
   const handleEdit = (name, value) => {

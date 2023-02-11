@@ -28,9 +28,9 @@ const TableContent = () => {
 
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isOpenAlert, setIsOpenAlert] = React.useState(false);
-  const [userData, setUserData] = React.useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
@@ -119,13 +119,14 @@ const TableContent = () => {
           response={deleteUserResponse}
         />
       )}
-      <ModalEditUser
-        updateUserResponseID={updateUserResponseID}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        response={deleteUserResponse}
-        userData={userData}
-      />
+      {userData && (
+        <ModalEditUser
+          updateUserResponseID={updateUserResponseID}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          userData={userData}
+        />
+      )}
       <ModalAlert isOpen={isOpenAlert} setIsOpen={setIsOpenAlert} />
     </>
   ) : (
