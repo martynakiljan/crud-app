@@ -25,6 +25,7 @@ import ModalAlert from "./ModalAlert";
 
 const TableContent = () => {
   const { users } = useContext(Context);
+  console.log(users);
 
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [updateUserResponseID, setUpdateUserResponseID] = useState(null);

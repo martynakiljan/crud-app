@@ -31,16 +31,14 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
 
   useEffect(() => {
     if (userData) {
-      for (const [key, value] of Object.entries(userData)) {
-        const newDataForm = {
-          firstName: value,
-          lastName: value,
-          userName: value,
-          email: value,
-        };
-        setFormData(newDataForm);
-      }
-      console.log(formData);
+      const { fname, lname, username, email } = userData;
+      const editedData = {
+        firstName: fname,
+        lastName: lname,
+        userName: username,
+        email: email,
+      };
+      setFormData(editedData);
     }
   }, [userData]);
 
@@ -142,7 +140,7 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
           key={id}
           text={text}
           name={name}
-          value={formData.name}
+          value={formData[name]}
           formErrors={formErrors[name]}
           onChange={(event) => handleEdit(name, event.target.value)}
         />
