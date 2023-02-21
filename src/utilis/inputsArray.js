@@ -25,4 +25,10 @@ export const inputs = [
     name: "email",
     text: "Email:",
   },
+  {
+    id: "avatar",
+    type: "file",
+    name: "avatar",
+    text: "Avatar:",
+  },
 ];

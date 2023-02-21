@@ -1,7 +1,7 @@
 /** @format */
 
 import { CircularProgress } from "@mui/material";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
 import Context from "../utilis/context";
@@ -10,6 +10,7 @@ import {
   validateLastName,
   validateEmail,
   validateUserName,
+  validateAvatar,
 } from "../utilis/validateInput";
 import { Button } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
@@ -20,9 +21,11 @@ const defaultFormData = {
   lastName: "",
   userName: "",
   email: "",
+  id: null,
+  avatar: "",
 };
 
-const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
+const Form = ({ setIsOpen, userData }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -31,13 +34,17 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
 
   useEffect(() => {
     if (userData) {
-      const { fname, lname, username, email } = userData;
+      const { fname, lname, username, email, id, avatar } = userData;
       const editedData = {
         firstName: fname,
         lastName: lname,
         userName: username,
         email: email,
+        id: id,
+        avatar: avatar,
       };
+
+      console.log(email);
       setFormData(editedData);
     }
   }, [userData]);
@@ -45,11 +52,13 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
   const addNewUser = async () => {
     try {
       setLoading(true);
+      console.log(formData.email);
       const response = await createNewUsers(
         formData.firstName,
         formData.lastName,
         formData.userName,
-        formData.email
+        formData.email,
+        formData.avatar
       );
       setCreateResponse(response);
       return response;
@@ -74,7 +83,8 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
         formData.lastName,
         formData.userName,
         formData.email,
-        updateUserResponseID
+        formData.id,
+        formData.avatar
       );
       setCreateResponse(response);
       return response;
@@ -97,11 +107,11 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
     event.preventDefault();
 
     if (isValidForm()) {
-      addNewUser();
-    }
-
-    if (updateUserResponseID) {
-      updateUserFun();
+      if (formData.id) {
+        updateUserFun();
+      } else {
+        addNewUser();
+      }
     }
   };
 
@@ -119,6 +129,9 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
       case "email":
         validateEmail(value, setFormErrorsWrapper);
         break;
+      case "avatar":
+        validateAvatar(value, setFormErrorsWrapper);
+        break;
       default:
         break;
     }
@@ -132,19 +145,28 @@ const Form = ({ setIsOpen, updateUserResponseID, userData }) => {
     setIsOpen(false);
     reloadPage();
   };
+  const inputRef = useRef();
 
   return !createResponse ? (
     <form>
-      {inputs.map(({ id, text, name }) => (
+      {inputs.map(({ id, text, name, type }) => ( 
         <FormInput
           key={id}
           text={text}
           name={name}
+          type={type}
           value={formData[name]}
           formErrors={formErrors[name]}
           onChange={(event) => handleEdit(name, event.target.value)}
         />
       ))}
+      <input
+        type="file"
+        id="input"
+        name="avatar"
+        onChange={() => handleEdit(name[avatar], inputRef.current.files[0])}
+        ref={inputRef}
+      />
       {loading ? (
         <CircularProgress color="secondary" />
       ) : (

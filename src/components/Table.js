@@ -22,13 +22,12 @@ import deleteUsers from "../API/deleteUsers";
 import ModalRemoveUser from "./ModalRemoveUser";
 import ModalEditUser from "./ModalEditUser";
 import ModalAlert from "./ModalAlert";
+import fetchUserByID from "../API/fetchUserByID";
 
 const TableContent = () => {
   const { users } = useContext(Context);
-  console.log(users);
 
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
-  const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -47,23 +46,26 @@ const TableContent = () => {
     setIsOpen(true);
   };
 
-  const updateUser = (id, fname, lname, username) => {
-    setUserData({ fname, lname, username });
+  const fetchUserDetails = async (id) => {
     if (id < 12) {
       setIsOpenAlert(true);
     } else {
-      setUpdateUserResponseID(id);
-      setIsOpen(true);
+      const usersDetailsResponse = await fetchUserByID(id);
+      if (usersDetailsResponse.status === "ok") {
+        setUserData(usersDetailsResponse.user);
+        console.log(userData);
+        setIsOpen(true);
+      }
     }
   };
 
-  const renderButtons = (id, avatar, fname, lname, email, username) => {
+  const renderButtons = (id) => {
     return (
       <div>
         <Button
           variant="text"
           color="secondary"
-          onClick={() => updateUser(id, avatar, fname, lname, email, username)}
+          onClick={() => fetchUserDetails(id)}
         >
           EDIT
         </Button>
@@ -93,7 +95,7 @@ const TableContent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users?.map(({ id, avatar, fname, lname, username }) => (
+            {users?.map(({ id, avatar, fname, lname, username, email }) => (
               <TableRow
                 key={id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -105,9 +107,8 @@ const TableContent = () => {
                 <TableCell align="left">{fname}</TableCell>
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
-                <TableCell align="left">
-                  {renderButtons(id, fname, lname, username)}
-                </TableCell>
+                <TableCell align="left">{email}</TableCell>
+                <TableCell align="left">{renderButtons(id)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -122,7 +123,6 @@ const TableContent = () => {
       )}
       {userData && (
         <ModalEditUser
-          updateUserResponseID={updateUserResponseID}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           userData={userData}
