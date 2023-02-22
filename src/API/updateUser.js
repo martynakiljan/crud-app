@@ -2,7 +2,6 @@
 import detailUser from "./detailUser";
 
 const updateUser = async (fname, lname, username, email, id) => {
-  console.log(fname, lname, username, email, id);
   const requestOptions = {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -22,7 +21,6 @@ const updateUser = async (fname, lname, username, email, id) => {
     .then((response) => response.json())
     .then((response) => {
       detailUser(id);
-      console.log(response);
       return response;
     });
   return createResponse;

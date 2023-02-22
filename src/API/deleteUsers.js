@@ -18,6 +18,7 @@ const deleteUsers = async (id) => {
   )
     .then((response) => response.json())
     .then((response) => {
+      console.log(response);
       fetchUsers();
       return response;
     });

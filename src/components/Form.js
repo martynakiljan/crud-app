@@ -29,6 +29,7 @@ const Form = ({ setIsOpen, userData }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
   useEffect(() => {
@@ -49,7 +50,6 @@ const Form = ({ setIsOpen, userData }) => {
   const addNewUser = async () => {
     try {
       setLoading(true);
-      console.log(formData.email);
       const response = await createNewUsers(
         formData.firstName,
         formData.lastName,

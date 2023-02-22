@@ -19,7 +19,6 @@ const createNewUsers = async (fname, lname, username, email, avatar) => {
   )
     .then((response) => response.json())
     .then((response) => {
-      console.log(response);
       return response;
     });
   return createResponse;

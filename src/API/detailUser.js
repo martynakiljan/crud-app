@@ -1,7 +1,6 @@
 /** @format */
 
 const detailUser = async (fname, lname, username, email, id, avatar) => {
-  console.log(id, email);
   const requestOptions = {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -21,7 +20,6 @@ const detailUser = async (fname, lname, username, email, id, avatar) => {
   )
     .then((response) => response.json())
     .then((response) => {
-      console.log(response);
       return response;
     });
   return createResponse;

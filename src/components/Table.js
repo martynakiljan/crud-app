@@ -27,22 +27,23 @@ import fetchUserByID from "../API/fetchUserByID";
 const TableContent = () => {
   const { users } = useContext(Context);
 
-
+  console.log(users);
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [userData, setUserData] = useState(null);
 
   const renderMedia = (avatar) => {
-    console.log(avatar);
     return <Avatar justify="center" src={avatar} />;
   };
 
   const deleteUser = (id) => {
+    console.log(id);
     getResponseFromAPI(id);
   };
 
   const getResponseFromAPI = async (id) => {
+    console.log(id);
     const response = await deleteUsers(id);
     setDeleteUserResponse(response);
     setIsOpen(true);
@@ -55,7 +56,6 @@ const TableContent = () => {
       const usersDetailsResponse = await fetchUserByID(id);
       if (usersDetailsResponse.status === "ok") {
         setUserData(usersDetailsResponse.user);
-        console.log(userData);
         setIsOpen(true);
       }
     }
@@ -74,7 +74,7 @@ const TableContent = () => {
         <IconButton
           aria-label="delete"
           size="large"
-          onClick={() => deleteUser()}
+          onClick={() => deleteUser(id)}
         >
           <DeleteIcon fontSize="inherit" />
         </IconButton>
