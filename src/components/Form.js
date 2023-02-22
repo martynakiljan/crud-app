@@ -93,12 +93,14 @@ const Form = ({ setIsOpen, userData }) => {
 
   const isValidForm = () => {
     return Object.values(formErrors).every(
-      (currentValue) => currentValue === ""
+      (currentValue) => currentValue === "" || currentValue === null
     );
   };
 
   const isEmptyForm = () => {
-    return Object.values(formData).every((currentValue) => currentValue === "");
+    return Object.values(formData).every(
+      (currentValue) => currentValue === "" || currentValue === null
+    );
   };
 
   const handleSubmit = (event) => {

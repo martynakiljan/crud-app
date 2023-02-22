@@ -75,7 +75,7 @@ export const validateEmail = (email, setFormErrors) => {
 };
 
 export const validateAvatar = (avatar, setFormErrors) => {
-  if (avatar.length === 0) {
+  if (!avatar) {
     setFormErrors("avatar", "avatar is missing");
   } else {
     setFormErrors("avatar", "");

@@ -2,7 +2,7 @@
 
 import Context from "../utilis/context";
 
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   TableBody,
   TableCell,
@@ -26,8 +26,7 @@ import fetchUserByID from "../API/fetchUserByID";
 
 const TableContent = () => {
   const { users } = useContext(Context);
-
-  console.log(users);
+  
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
@@ -38,12 +37,10 @@ const TableContent = () => {
   };
 
   const deleteUser = (id) => {
-    console.log(id);
     getResponseFromAPI(id);
   };
 
   const getResponseFromAPI = async (id) => {
-    console.log(id);
     const response = await deleteUsers(id);
     setDeleteUserResponse(response);
     setIsOpen(true);
