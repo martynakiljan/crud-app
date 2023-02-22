@@ -22,14 +22,13 @@ const defaultFormData = {
   userName: "",
   email: "",
   id: null,
-  avatar: "",
+  avatar: null,
 };
 
 const Form = ({ setIsOpen, userData }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
   useEffect(() => {
@@ -43,8 +42,6 @@ const Form = ({ setIsOpen, userData }) => {
         id: id,
         avatar: avatar,
       };
-
-      console.log(email);
       setFormData(editedData);
     }
   }, [userData]);
@@ -86,6 +83,7 @@ const Form = ({ setIsOpen, userData }) => {
         formData.id,
         formData.avatar
       );
+
       setCreateResponse(response);
       return response;
     } catch {
@@ -149,7 +147,7 @@ const Form = ({ setIsOpen, userData }) => {
 
   return !createResponse ? (
     <form>
-      {inputs.map(({ id, text, name, type }) => ( 
+      {inputs.map(({ id, text, name, type }) => (
         <FormInput
           key={id}
           text={text}
@@ -164,7 +162,9 @@ const Form = ({ setIsOpen, userData }) => {
         type="file"
         id="input"
         name="avatar"
-        onChange={() => handleEdit(name[avatar], inputRef.current.files[0])}
+        onChange={() =>
+          handleEdit("avatar", URL.createObjectURL(inputRef.current.files[0]))
+        }
         ref={inputRef}
       />
       {loading ? (
