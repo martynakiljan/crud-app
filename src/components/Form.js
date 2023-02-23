@@ -1,6 +1,8 @@
 /** @format */
 
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, OutlinedInput } from "@mui/material";
+import FormControl from "@mui/joy/FormControl";
+import { FormLabel, Error } from "../utilis/styledcomponents";
 import React, { useState, useContext, useEffect, useRef } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
@@ -93,12 +95,12 @@ const Form = ({ setIsOpen, userData }) => {
 
   const isValidForm = () => {
     return Object.values(formErrors).every(
-      (currentValue) => currentValue === "" || currentValue === null
+      (currentValue) => currentValue === "" || currentValue === ""
     );
   };
 
   const isEmptyForm = () => {
-    return Object.values(formData).every(
+  Object.values(formData).every(
       (currentValue) => currentValue === "" || currentValue === null
     );
   };
@@ -160,15 +162,24 @@ const Form = ({ setIsOpen, userData }) => {
           onChange={(event) => handleEdit(name, event.target.value)}
         />
       ))}
-      <input
-        type="file"
-        id="input"
-        name="avatar"
-        onChange={() =>
-          handleEdit("avatar", URL.createObjectURL(inputRef.current.files[0]))
-        }
-        ref={inputRef}
-      />
+      <FormControl sx={{ width: "55ch" }}>
+        <FormLabel>
+          {" "}
+          Upload avatar
+          <input
+            type="file"
+            id="input"
+            name="avatar"
+            onChange={() =>
+              handleEdit(
+                "avatar",
+                URL.createObjectURL(inputRef.current.files[0])
+              )
+            }
+            ref={inputRef}
+          />
+        </FormLabel>
+      </FormControl>
       {loading ? (
         <CircularProgress color="secondary" />
       ) : (
@@ -182,6 +193,9 @@ const Form = ({ setIsOpen, userData }) => {
           submit
         </Button>
       )}
+      {isEmptyForm || !isValidForm ? (
+        <Error>you must complete all fields</Error>
+      ) : null}
     </form>
   ) : (
     <>

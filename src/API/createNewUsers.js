@@ -1,6 +1,7 @@
 /** @format */
 
 const createNewUsers = async (fname, lname, username, email, avatar) => {
+  console.log(avatar);
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
