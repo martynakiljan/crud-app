@@ -74,11 +74,11 @@ export const validateEmail = (email, setFormErrors) => {
   }
 };
 
-export const validateAvatar = (avatar, setFormErrors) => {
-  if (!avatar) {
-    setFormErrors("avatar", "avatar is missing");
-  } else {
-    setFormErrors("avatar", "");
-    return true;
-  }
-};
+// export const validateAvatar = (avatar, setFormErrors) => {
+//   if (avatar === "") {
+//     setFormErrors("avatar", "avatar is missing");
+//   } else {
+//     setFormErrors("avatar", "");
+//     return true;
+//   }
+// };

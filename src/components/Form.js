@@ -24,13 +24,14 @@ const defaultFormData = {
   userName: "",
   email: "",
   id: null,
-  avatar: null,
+  avatar: "",
 };
 
 const Form = ({ setIsOpen, userData }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isCompleteFormState, setIsCompleteFormState] = useState(false);
 
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
@@ -56,8 +57,7 @@ const Form = ({ setIsOpen, userData }) => {
         formData.firstName,
         formData.lastName,
         formData.userName,
-        formData.email,
-        formData.avatar
+        formData.email
       );
       setCreateResponse(response);
       return response;
@@ -75,6 +75,14 @@ const Form = ({ setIsOpen, userData }) => {
   };
 
   const updateUserFun = async () => {
+    console.log(
+      formData.firstName,
+      formData.lastName,
+      formData.userName,
+      formData.email,
+      formData.id,
+      formData.avatar
+    );
     try {
       setLoading(true);
       const response = await updateUser(
@@ -95,20 +103,28 @@ const Form = ({ setIsOpen, userData }) => {
 
   const isValidForm = () => {
     return Object.values(formErrors).every(
-      (currentValue) => currentValue === "" || currentValue === ""
+      (currentValue) => currentValue === ""
     );
   };
 
-  const isEmptyForm = () => {
-  Object.values(formData).every(
-      (currentValue) => currentValue === "" || currentValue === null
-    );
+  const isEmptyForm = () =>
+    Object.entries(formData)
+      .filter(([k, v]) => k !== "id" && k !== "avatar")
+      .every(([k, v]) => v === "");
+
+  const isCompleteForm = () => {
+
+    Object.entries(formData)
+      .filter(([k, v]) => k !== "id" && k !== "avatar")
+      .every(([k, v]) => v !== "");
   };
+
+  console.log(isCompleteForm());
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (isValidForm()) {
+    if (isValidForm() && isCompleteForm()) {
       if (formData.id) {
         updateUserFun();
       } else {
@@ -130,9 +146,6 @@ const Form = ({ setIsOpen, userData }) => {
         break;
       case "email":
         validateEmail(value, setFormErrorsWrapper);
-        break;
-      case "avatar":
-        validateAvatar(value, setFormErrorsWrapper);
         break;
       default:
         break;
@@ -193,9 +206,7 @@ const Form = ({ setIsOpen, userData }) => {
           submit
         </Button>
       )}
-      {isEmptyForm || !isValidForm ? (
-        <Error>you must complete all fields</Error>
-      ) : null}
+      {isCompleteFormState ? <Error>you must complete all fields</Error> : null}
     </form>
   ) : (
     <>
