@@ -26,13 +26,14 @@ import fetchUserByID from "../API/fetchUserByID";
 
 const TableContent = () => {
   const { users } = useContext(Context);
-  
+
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [userData, setUserData] = useState(null);
 
   const renderMedia = (avatar) => {
+    // console.log(`${avatar} w table.js`);
     return <Avatar justify="center" src={avatar} />;
   };
 
