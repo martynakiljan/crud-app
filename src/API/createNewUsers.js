@@ -9,7 +9,7 @@ const createNewUsers = async (fname, lname, username, email, avatar) => {
       lname: lname,
       username: username,
       email: email,
-      avatar: "https://www.melivecode.com/users/cat.png",
+      avatar: avatar,
     }),
   };
 

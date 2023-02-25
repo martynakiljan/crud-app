@@ -12,7 +12,6 @@ import {
   validateLastName,
   validateEmail,
   validateUserName,
-  validateAvatar,
 } from "../utilis/validateInput";
 import { Button } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
@@ -57,7 +56,8 @@ const Form = ({ setIsOpen, userData }) => {
         formData.firstName,
         formData.lastName,
         formData.userName,
-        formData.email
+        formData.email,
+        formData.avatar
       );
       setCreateResponse(response);
       return response;
@@ -67,6 +67,7 @@ const Form = ({ setIsOpen, userData }) => {
   };
 
   const handleEdit = (name, value) => {
+    console.log(name, value);
     validateInput(name, value);
     setFormData((formData) => ({
       ...formData,
@@ -75,14 +76,6 @@ const Form = ({ setIsOpen, userData }) => {
   };
 
   const updateUserFun = async () => {
-    console.log(
-      formData.firstName,
-      formData.lastName,
-      formData.userName,
-      formData.email,
-      formData.id,
-      formData.avatar
-    );
     try {
       setLoading(true);
       const response = await updateUser(
@@ -113,13 +106,16 @@ const Form = ({ setIsOpen, userData }) => {
       .every(([k, v]) => v === "");
 
   const isCompleteForm = () => {
-
-    Object.entries(formData)
-      .filter(([k, v]) => k !== "id" && k !== "avatar")
+    const completedForm = Object.entries(formData)
+      .filter(([k, v]) => k !== "id")
       .every(([k, v]) => v !== "");
+
+    if (completedForm) {
+      setIsCompleteFormState(true);
+    }
+    return completedForm;
   };
 
-  console.log(isCompleteForm());
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -206,7 +202,9 @@ const Form = ({ setIsOpen, userData }) => {
           submit
         </Button>
       )}
-      {isCompleteFormState ? <Error>you must complete all fields</Error> : null}
+      {!isCompleteFormState ? (
+        <Error>you must complete all fields</Error>
+      ) : null}
     </form>
   ) : (
     <>
