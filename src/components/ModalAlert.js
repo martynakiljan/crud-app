@@ -1,28 +1,34 @@
 /** @format */
 
 import React from "react";
-import Typography from "@mui/material/Typography";
-import Form from "./Form";
+import { Typography, Button } from "@mui/material";
 import Modal from "./Modal";
 
-const ModalEditUser = ({ isOpen, setIsOpen, userData }) => {
+const ModalAlert = ({ isOpen, setIsOpen }) => {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Typography
         id="fade-modal-dialog-title"
         component="h2"
         level="inherit"
-        fontSize="24px"
+        fontSize="18px"
         mb="0.25em"
         color="secondary"
         text-align="center"
         width="100%"
       >
-        Edit User:
+        unfortunately you can't edit users with id 1-12
       </Typography>
-      <Form isOpen={isOpen} setIsOpen={setIsOpen} userData={userData} />
+      <Button
+        onClick={() => window.location.reload()}
+        variant="contained"
+        type="button"
+        color="secondary"
+      >
+        OK
+      </Button>
     </Modal>
   );
 };
 
-export default ModalEditUser;
+export default ModalAlert;

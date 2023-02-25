@@ -1,3 +1,4 @@
+/** @format */
 
 export const validateFirstName = (fname, setFormErrors) => {
   if (fname.length < 3) {
@@ -72,3 +73,12 @@ export const validateEmail = (email, setFormErrors) => {
     return true;
   }
 };
+
+// export const validateAvatar = (avatar, setFormErrors) => {
+//   if (avatar === "") {
+//     setFormErrors("avatar", "avatar is missing");
+//   } else {
+//     setFormErrors("avatar", "");
+//     return true;
+//   }
+// };

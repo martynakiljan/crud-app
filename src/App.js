@@ -11,6 +11,7 @@ const defaultContext = {
   lastName: "",
   userName: "",
   email: "",
+  avatar: "",
 };
 
 const App = () => {

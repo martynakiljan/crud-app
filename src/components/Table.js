@@ -21,20 +21,22 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import deleteUsers from "../API/deleteUsers";
 import ModalRemoveUser from "./ModalRemoveUser";
 import ModalEditUser from "./ModalEditUser";
+import ModalAlert from "./ModalAlert";
+import fetchUserByID from "../API/fetchUserByID";
 
 const TableContent = () => {
   const { users } = useContext(Context);
-
+  
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
-  const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const renderMedia = (avatar) => {
     return <Avatar justify="center" src={avatar} />;
   };
 
   const deleteUser = (id) => {
-    console.log(id);
     getResponseFromAPI(id);
   };
 
@@ -44,19 +46,33 @@ const TableContent = () => {
     setIsOpen(true);
   };
 
-  const updateUser = (id) => {
-    setUpdateUserResponseID(id);
-    setIsOpen(true);
+  const fetchUserDetails = async (id) => {
+    if (id < 12) {
+      setIsOpenAlert(true);
+    } else {
+      const usersDetailsResponse = await fetchUserByID(id);
+      if (usersDetailsResponse.status === "ok") {
+        setUserData(usersDetailsResponse.user);
+        setIsOpen(true);
+      }
+    }
   };
 
   const renderButtons = (id) => {
-    console.log(id);
     return (
       <div>
-        <Button variant="text" color="secondary" onClick={(e) => updateUser(e)}>
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() => fetchUserDetails(id)}
+        >
           EDIT
         </Button>
-        <IconButton aria-label="delete" size="large" onClick={(e) => deleteUser(e)}>
+        <IconButton
+          aria-label="delete"
+          size="large"
+          onClick={() => deleteUser(id)}
+        >
           <DeleteIcon fontSize="inherit" />
         </IconButton>
       </div>
@@ -78,7 +94,7 @@ const TableContent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users?.map(({ id, avatar, fname, lname, username }) => (
+            {users?.map(({ id, avatar, fname, lname, username, email }) => (
               <TableRow
                 key={id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -90,6 +106,7 @@ const TableContent = () => {
                 <TableCell align="left">{fname}</TableCell>
                 <TableCell align="left">{lname}</TableCell>
                 <TableCell align="left">{username}</TableCell>
+                <TableCell align="left">{email}</TableCell>
                 <TableCell align="left">{renderButtons(id)}</TableCell>
               </TableRow>
             ))}
@@ -103,12 +120,14 @@ const TableContent = () => {
           response={deleteUserResponse}
         />
       )}
-      <ModalEditUser
-        updateUserResponseID={updateUserResponseID}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        response={deleteUserResponse}
-      />
+      {userData && (
+        <ModalEditUser
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          userData={userData}
+        />
+      )}
+      <ModalAlert isOpen={isOpenAlert} setIsOpen={setIsOpenAlert} />
     </>
   ) : (
     <Box display="flex" justifyContent="center" alignItems="center">

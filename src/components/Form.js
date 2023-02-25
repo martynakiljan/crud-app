@@ -1,7 +1,9 @@
 /** @format */
 
-import { CircularProgress } from "@mui/material";
-import React, { useState, useContext } from "react";
+import { CircularProgress, OutlinedInput } from "@mui/material";
+import FormControl from "@mui/joy/FormControl";
+import { FormLabel, Error } from "../utilis/styledcomponents";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
 import Context from "../utilis/context";
@@ -10,7 +12,7 @@ import {
   validateLastName,
   validateEmail,
   validateUserName,
-  errors,
+  validateAvatar,
 } from "../utilis/validateInput";
 import { Button } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
@@ -21,14 +23,32 @@ const defaultFormData = {
   lastName: "",
   userName: "",
   email: "",
+  id: null,
+  avatar: "",
 };
 
-const Form = ({ setIsOpen, updateUserResponseID }) => {
+const Form = ({ setIsOpen, userData }) => {
   const [formData, setFormData] = useState(defaultFormData);
   const [createResponse, setCreateResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isCompleteFormState, setIsCompleteFormState] = useState(false);
 
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
+
+  useEffect(() => {
+    if (userData) {
+      const { fname, lname, username, email, id, avatar } = userData;
+      const editedData = {
+        firstName: fname,
+        lastName: lname,
+        userName: username,
+        email: email,
+        id: id,
+        avatar: avatar,
+      };
+      setFormData(editedData);
+    }
+  }, [userData]);
 
   const addNewUser = async () => {
     try {
@@ -44,7 +64,6 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     } catch {
       setLoading(false);
     }
-    setFormData(defaultFormData);
   };
 
   const handleEdit = (name, value) => {
@@ -56,6 +75,14 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
   };
 
   const updateUserFun = async () => {
+    console.log(
+      formData.firstName,
+      formData.lastName,
+      formData.userName,
+      formData.email,
+      formData.id,
+      formData.avatar
+    );
     try {
       setLoading(true);
       const response = await updateUser(
@@ -63,8 +90,10 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
         formData.lastName,
         formData.userName,
         formData.email,
-        updateUserResponseID
+        formData.id,
+        formData.avatar
       );
+
       setCreateResponse(response);
       return response;
     } catch {
@@ -78,19 +107,29 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     );
   };
 
-  const isEmptyForm = () => {
-    return Object.values(formData).every((currentValue) => currentValue === "");
+  const isEmptyForm = () =>
+    Object.entries(formData)
+      .filter(([k, v]) => k !== "id" && k !== "avatar")
+      .every(([k, v]) => v === "");
+
+  const isCompleteForm = () => {
+
+    Object.entries(formData)
+      .filter(([k, v]) => k !== "id" && k !== "avatar")
+      .every(([k, v]) => v !== "");
   };
+
+  console.log(isCompleteForm());
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (isValidForm()) {
-      addNewUser();
-    }
-
-    if (updateUserResponseID) {
-      updateUserFun();
+    if (isValidForm() && isCompleteForm()) {
+      if (formData.id) {
+        updateUserFun();
+      } else {
+        addNewUser();
+      }
     }
   };
 
@@ -121,19 +160,39 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     setIsOpen(false);
     reloadPage();
   };
+  const inputRef = useRef();
 
   return !createResponse ? (
     <form>
-      {inputs.map(({ id, text, name }) => (
+      {inputs.map(({ id, text, name, type }) => (
         <FormInput
           key={id}
           text={text}
           name={name}
-          value={formData.name}
+          type={type}
+          value={formData[name]}
           formErrors={formErrors[name]}
           onChange={(event) => handleEdit(name, event.target.value)}
         />
       ))}
+      <FormControl sx={{ width: "55ch" }}>
+        <FormLabel>
+          {" "}
+          Upload avatar
+          <input
+            type="file"
+            id="input"
+            name="avatar"
+            onChange={() =>
+              handleEdit(
+                "avatar",
+                URL.createObjectURL(inputRef.current.files[0])
+              )
+            }
+            ref={inputRef}
+          />
+        </FormLabel>
+      </FormControl>
       {loading ? (
         <CircularProgress color="secondary" />
       ) : (
@@ -147,6 +206,7 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
           submit
         </Button>
       )}
+      {isCompleteFormState ? <Error>you must complete all fields</Error> : null}
     </form>
   ) : (
     <>
