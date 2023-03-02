@@ -1,6 +1,6 @@
 /** @format */
 
-const createNewUsers = async (fname, lname, username, email, avatar) => {
+const createNewUsers = async (fname, lname, username, email) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -9,7 +9,7 @@ const createNewUsers = async (fname, lname, username, email, avatar) => {
       lname: lname,
       username: username,
       email: email,
-      avatar: avatar,
+      avatar: "https://www.melivecode.com/users/cat.png",
     }),
   };
 

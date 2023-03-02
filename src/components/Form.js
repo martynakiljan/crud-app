@@ -1,9 +1,7 @@
 /** @format */
 
-import { CircularProgress, OutlinedInput } from "@mui/material";
-import FormControl from "@mui/joy/FormControl";
-import { FormLabel, Error } from "../utilis/styledcomponents";
-import React, { useState, useContext, useEffect, useRef } from "react";
+import { CircularProgress } from "@mui/material";
+import React, { useState, useContext, useEffect } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
 import Context from "../utilis/context";
@@ -13,7 +11,7 @@ import {
   validateEmail,
   validateUserName,
 } from "../utilis/validateInput";
-import { Button } from "../utilis/styledcomponents";
+import { Button, Error } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
 import updateUser from "../API/updateUser";
 
@@ -23,7 +21,6 @@ const defaultFormData = {
   userName: "",
   email: "",
   id: null,
-  avatar: "",
 };
 
 const Form = ({ setIsOpen, userData }) => {
@@ -36,14 +33,13 @@ const Form = ({ setIsOpen, userData }) => {
 
   useEffect(() => {
     if (userData) {
-      const { fname, lname, username, email, id, avatar } = userData;
+      const { fname, lname, username, email, id } = userData;
       const editedData = {
         firstName: fname,
         lastName: lname,
         userName: username,
         email: email,
         id: id,
-        avatar: avatar,
       };
       setFormData(editedData);
     }
@@ -83,8 +79,7 @@ const Form = ({ setIsOpen, userData }) => {
         formData.lastName,
         formData.userName,
         formData.email,
-        formData.id,
-        formData.avatar
+        formData.id
       );
 
       setCreateResponse(response);
@@ -115,7 +110,6 @@ const Form = ({ setIsOpen, userData }) => {
     }
     return completedForm;
   };
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -156,7 +150,6 @@ const Form = ({ setIsOpen, userData }) => {
     setIsOpen(false);
     reloadPage();
   };
-  const inputRef = useRef();
 
   return !createResponse ? (
     <form>
@@ -171,24 +164,6 @@ const Form = ({ setIsOpen, userData }) => {
           onChange={(event) => handleEdit(name, event.target.value)}
         />
       ))}
-      <FormControl sx={{ width: "55ch" }}>
-        <FormLabel>
-          {" "}
-          Upload avatar
-          <input
-            type="file"
-            id="input"
-            name="avatar"
-            onChange={() =>
-              handleEdit(
-                "avatar",
-                URL.createObjectURL(inputRef.current.files[0])
-              )
-            }
-            ref={inputRef}
-          />
-        </FormLabel>
-      </FormControl>
       {loading ? (
         <CircularProgress color="secondary" />
       ) : (
