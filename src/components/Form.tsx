@@ -189,7 +189,6 @@ export const Form = ({ setIsOpen, userData }: FormPropsModalType) => {
     reloadPage();
   };
 
-  // const inputRef = useRef<HTMLInputElement>(null);
 
   return !createResponse ? (
     <form>

@@ -96,7 +96,7 @@ const TableContent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users?.map(({ id, avatar, fname, lname, username, email }) => (
+            {users?.map(({ id, avatar, fname, lname, username }) => (
               <TableRow
                 key={id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
