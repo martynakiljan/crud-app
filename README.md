@@ -2,12 +2,10 @@
 <h1> CRUD Website with React and an External API </h1>
 
 -------
-
-- I use an external API from MeCallAPI.com.
-- I use React and Type Script
+- I use an external API from https://www.melivecode.com/
 - I use MUI https://mui.com/ -  The React component library 
 
-
+technologies: REACT & TYPE SCRIPT, NPM and MUI 
 
 *i  I display users, I Can add new and remove or can edit them. The form is also validated.*
 
