@@ -3,7 +3,25 @@ import FormControl from "@mui/joy/FormControl";
 import { Error, FormLabel } from "../utilis/styledcomponents";
 import { OutlinedInput } from "@mui/material";
 
-const FormInput = ({ type, text, id, name, value, formErrors, onChange }) => {
+type DefaultProps = {
+  type: string;
+  text: string;
+  name: string;
+  id: string;
+  value: string | number;
+  formErrors: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const FormInput = ({
+  type,
+  text,
+  id,
+  name,
+  value,
+  formErrors,
+  onChange,
+}: DefaultProps) => {
   return (
     <FormControl sx={{ width: "55ch" }}>
       <FormLabel>

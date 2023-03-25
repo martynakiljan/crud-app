@@ -1,7 +1,7 @@
 /** @format */
 
 import { CircularProgress } from "@mui/material";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
 import Context from "../utilis/context";
@@ -15,19 +15,58 @@ import { Button, Error } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
 import updateUser from "../API/updateUser";
 
+export type FormErrorsType = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+};
+
+type DefaultFormDataType = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  id: number;
+};
+
+export type UserDataType = {
+  fname: string;
+  lname: string;
+  username: string;
+  email: string;
+  id: number;
+  avatar?: string;
+};
+
 const defaultFormData = {
   firstName: "",
   lastName: "",
   userName: "",
   email: "",
-  id: null,
+  id: 0,
 };
 
-const Form = ({ setIsOpen, userData }) => {
-  const [formData, setFormData] = useState(defaultFormData);
-  const [createResponse, setCreateResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isCompleteFormState, setIsCompleteFormState] = useState(false);
+export type FormPropsModalType = {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  userData?: UserDataType;
+};
+
+export type DefaultResponseType = {
+  status: string;
+  message: string;
+  user: UserDataType;
+};
+
+export const Form = ({ setIsOpen, userData }: FormPropsModalType) => {
+  const [formData, setFormData] =
+    useState<DefaultFormDataType>(defaultFormData);
+  const [createResponse, setCreateResponse] =
+    useState<DefaultResponseType | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isCompleteFormState, setIsCompleteFormState] =
+    useState<boolean>(false);
 
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
 
@@ -52,8 +91,7 @@ const Form = ({ setIsOpen, userData }) => {
         formData.firstName,
         formData.lastName,
         formData.userName,
-        formData.email,
-        formData.avatar
+        formData.email
       );
       setCreateResponse(response);
       return response;
@@ -62,7 +100,7 @@ const Form = ({ setIsOpen, userData }) => {
     }
   };
 
-  const handleEdit = (name, value) => {
+  const handleEdit = (name: string, value: string) => {
     console.log(name, value);
     validateInput(name, value);
     setFormData((formData) => ({
@@ -111,7 +149,7 @@ const Form = ({ setIsOpen, userData }) => {
     return completedForm;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
     if (isValidForm() && isCompleteForm()) {
@@ -123,7 +161,7 @@ const Form = ({ setIsOpen, userData }) => {
     }
   };
 
-  const validateInput = (name, value) => {
+  const validateInput = (name: string, value: string) => {
     switch (name) {
       case "firstName":
         validateFirstName(value, setFormErrorsWrapper);
@@ -151,17 +189,22 @@ const Form = ({ setIsOpen, userData }) => {
     reloadPage();
   };
 
+  // const inputRef = useRef<HTMLInputElement>(null);
+
   return !createResponse ? (
     <form>
       {inputs.map(({ id, text, name, type }) => (
         <FormInput
           key={id}
           text={text}
+          id={id}
           name={name}
           type={type}
-          value={formData[name]}
-          formErrors={formErrors[name]}
-          onChange={(event) => handleEdit(name, event.target.value)}
+          value={formData[name as keyof DefaultFormDataType]}
+          formErrors={formErrors[name as keyof FormErrorsType]}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleEdit(name, event.target.value)
+          }
         />
       ))}
       {loading ? (

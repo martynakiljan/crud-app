@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 export const FormLabel = styled.label`
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 6px 0;
 `;
 
 export const Wrapper = styled.section`
@@ -37,4 +37,15 @@ export const Button = styled.button`
 export const Error = styled.p`
   color: red;
   margin: 0;
+`;
+
+export const ToolbarInner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Dialog = styled.div`
+  width: 80%;
+  height: 50%;
 `;
