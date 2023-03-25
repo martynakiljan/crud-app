@@ -7,7 +7,7 @@
 
 technologies: REACT & TYPE SCRIPT, NPM and MUI 
 
-* I display users, I Can add new and remove or can edit them. The form is also validated.*
+*I display users, I Can add new and remove or can edit them. The form is also validated.*
 
 
 <img width="1221" alt="Zrzut ekranu 2023-03-25 o 11 33 28" src="https://user-images.githubusercontent.com/59742201/227718781-bc5a4b83-841b-4fd9-a1fb-eda7c656c00e.png">
