@@ -1,9 +1,8 @@
 /** @format */
-import detailUser from "./detailUser";
 
-const updateUser = async (fname, lname, username, email, id) => {
+const detailUser = async (fname, lname, username, email, id, avatar) => {
   const requestOptions = {
-    method: "PUT",
+    method: "GET",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       id: id,
@@ -11,19 +10,19 @@ const updateUser = async (fname, lname, username, email, id) => {
       lname: lname,
       username: username,
       email: email,
+      avatar: avatar,
     }),
   };
 
   const createResponse = await fetch(
-    "https://www.melivecode.com/api/users/update",
+    "https://www.melivecode.com/api/users/{id}",
     requestOptions
   )
     .then((response) => response.json())
     .then((response) => {
-      detailUser(id);
       return response;
     });
   return createResponse;
 };
 
-export default updateUser;
+export default detailUser;

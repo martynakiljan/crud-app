@@ -1,9 +1,11 @@
+/** @format */
+
 import React from "react";
 import { Typography, AppBar, Toolbar } from "@material-ui/core";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import { ToolbarInner } from "../utilis/styledcomponents";
 
 const Topbar = () => {
-  
   function refreshPage() {
     window.location.reload();
   }
@@ -11,18 +13,12 @@ const Topbar = () => {
   return (
     <AppBar position="sticky" color="secondary">
       <Toolbar>
-        <PeopleOutlineIcon onClick={refreshPage} sx={{ m: 2 }} />
-        <Typography
-          onClick={refreshPage}
-          variant="h6"
-          sx={{ m: 2 }}
-          fontSize={{
-            md: 25,
-            xs: 15,
-          }}
-        >
-          CRUD App
-        </Typography>
+        <ToolbarInner onClick={refreshPage}>
+          <PeopleOutlineIcon sx={{ m: 2 }} />
+          <Typography variant="h6" component="h6">
+            CRUD App
+          </Typography>
+        </ToolbarInner>
       </Toolbar>
     </AppBar>
   );

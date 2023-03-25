@@ -3,27 +3,21 @@
 import React from "react";
 import { Typography, Button } from "@mui/material";
 import Modal from "./Modal";
+import { FormPropsModalType } from "./Form";
 
-const ModalRemoveUser = ({ isOpen, setIsOpen, response }) => {
-  const { status, message } = response;
-
+const ModalAlert = ({ isOpen, setIsOpen }: FormPropsModalType) => {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Typography
-        id="fade-modal-dialog-title"
         component="h2"
-        level="inherit"
-        fontSize="24px"
+        fontSize="18px"
         mb="0.25em"
         color="secondary"
         text-align="center"
         width="100%"
       >
-        Remove User:
+        unfortunately you can't edit users with id 1-12
       </Typography>
-      <p>
-        {status}: {message}
-      </p>
       <Button
         onClick={() => window.location.reload()}
         variant="contained"
@@ -36,4 +30,4 @@ const ModalRemoveUser = ({ isOpen, setIsOpen, response }) => {
   );
 };
 
-export default ModalRemoveUser;
+export default ModalAlert;

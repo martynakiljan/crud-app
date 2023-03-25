@@ -1,7 +1,7 @@
 /** @format */
 
 import { CircularProgress } from "@mui/material";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import createNewUsers from "../API/createNewUsers";
 import FormInput from "./FormInput";
 import Context from "../utilis/context";
@@ -10,25 +10,79 @@ import {
   validateLastName,
   validateEmail,
   validateUserName,
-  errors,
 } from "../utilis/validateInput";
-import { Button } from "../utilis/styledcomponents";
+import { Button, Error } from "../utilis/styledcomponents";
 import { inputs } from "../utilis/inputsArray";
 import updateUser from "../API/updateUser";
+
+export type FormErrorsType = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+};
+
+type DefaultFormDataType = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  id: number;
+};
+
+export type UserDataType = {
+  fname: string;
+  lname: string;
+  username: string;
+  email: string;
+  id: number;
+  avatar?: string;
+};
 
 const defaultFormData = {
   firstName: "",
   lastName: "",
   userName: "",
   email: "",
+  id: 0,
 };
 
-const Form = ({ setIsOpen, updateUserResponseID }) => {
-  const [formData, setFormData] = useState(defaultFormData);
-  const [createResponse, setCreateResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
+export type FormPropsModalType = {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  userData?: UserDataType;
+};
+
+export type DefaultResponseType = {
+  status: string;
+  message: string;
+  user: UserDataType;
+};
+
+export const Form = ({ setIsOpen, userData }: FormPropsModalType) => {
+  const [formData, setFormData] =
+    useState<DefaultFormDataType>(defaultFormData);
+  const [createResponse, setCreateResponse] =
+    useState<DefaultResponseType | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isCompleteFormState, setIsCompleteFormState] =
+    useState<boolean>(false);
 
   const { formErrors, setFormErrorsWrapper } = useContext(Context);
+
+  useEffect(() => {
+    if (userData) {
+      const { fname, lname, username, email, id } = userData;
+      const editedData = {
+        firstName: fname,
+        lastName: lname,
+        userName: username,
+        email: email,
+        id: id,
+      };
+      setFormData(editedData);
+    }
+  }, [userData]);
 
   const addNewUser = async () => {
     try {
@@ -44,10 +98,10 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     } catch {
       setLoading(false);
     }
-    setFormData(defaultFormData);
   };
 
-  const handleEdit = (name, value) => {
+  const handleEdit = (name: string, value: string) => {
+    console.log(name, value);
     validateInput(name, value);
     setFormData((formData) => ({
       ...formData,
@@ -63,8 +117,9 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
         formData.lastName,
         formData.userName,
         formData.email,
-        updateUserResponseID
+        formData.id
       );
+
       setCreateResponse(response);
       return response;
     } catch {
@@ -78,23 +133,35 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     );
   };
 
-  const isEmptyForm = () => {
-    return Object.values(formData).every((currentValue) => currentValue === "");
+  const isEmptyForm = () =>
+    Object.entries(formData)
+      .filter(([k, v]) => k !== "id" && k !== "avatar")
+      .every(([k, v]) => v === "");
+
+  const isCompleteForm = () => {
+    const completedForm = Object.entries(formData)
+      .filter(([k, v]) => k !== "id")
+      .every(([k, v]) => v !== "");
+
+    if (completedForm) {
+      setIsCompleteFormState(true);
+    }
+    return completedForm;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
-    if (isValidForm()) {
-      addNewUser();
-    }
-
-    if (updateUserResponseID) {
-      updateUserFun();
+    if (isValidForm() && isCompleteForm()) {
+      if (formData.id) {
+        updateUserFun();
+      } else {
+        addNewUser();
+      }
     }
   };
 
-  const validateInput = (name, value) => {
+  const validateInput = (name: string, value: string) => {
     switch (name) {
       case "firstName":
         validateFirstName(value, setFormErrorsWrapper);
@@ -122,16 +189,21 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
     reloadPage();
   };
 
+
   return !createResponse ? (
     <form>
-      {inputs.map(({ id, text, name }) => (
+      {inputs.map(({ id, text, name, type }) => (
         <FormInput
           key={id}
           text={text}
+          id={id}
           name={name}
-          value={formData.name}
-          formErrors={formErrors[name]}
-          onChange={(event) => handleEdit(name, event.target.value)}
+          type={type}
+          value={formData[name as keyof DefaultFormDataType]}
+          formErrors={formErrors[name as keyof FormErrorsType]}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleEdit(name, event.target.value)
+          }
         />
       ))}
       {loading ? (
@@ -147,6 +219,9 @@ const Form = ({ setIsOpen, updateUserResponseID }) => {
           submit
         </Button>
       )}
+      {!isCompleteFormState ? (
+        <Error>you must complete all fields</Error>
+      ) : null}
     </form>
   ) : (
     <>

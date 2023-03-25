@@ -1,5 +1,9 @@
+/** @format */
 
-export const validateFirstName = (fname, setFormErrors) => {
+export const validateFirstName = (
+  fname: string,
+  setFormErrors: (name: string, error: string) => void
+) => {
   if (fname.length < 3) {
     setFormErrors("firstName", "first name must have at least 3 characters");
   } else {
@@ -8,7 +12,10 @@ export const validateFirstName = (fname, setFormErrors) => {
   }
 };
 
-export const validateLastName = (lname, setFormErrors) => {
+export const validateLastName = (
+  lname: string,
+  setFormErrors: (name: string, error: string) => void
+) => {
   if (lname.length < 3) {
     setFormErrors("lastName", "last name must have at least 3 characters");
   } else {
@@ -17,15 +24,18 @@ export const validateLastName = (lname, setFormErrors) => {
   }
 };
 
-function isLetter(c) {
+function isLetter(c: any) {
   return c.toLowerCase() !== c.toUpperCase();
 }
 
-function isNumber(n) {
+function isNumber(n: any) {
   return !isNaN(n);
 }
 
-export const validateUserName = (username, setFormErrors) => {
+export const validateUserName = (
+  username: string,
+  setFormErrors: (name: string, error: string) => void
+) => {
   // Liczba znaków numerycznych w 'username'.
   let numbersCount = 0;
 
@@ -64,7 +74,10 @@ export const validateUserName = (username, setFormErrors) => {
   return true;
 };
 
-export const validateEmail = (email, setFormErrors) => {
+export const validateEmail = (
+  email: string,
+  setFormErrors: (name: string, error: string) => void
+) => {
   if (!new RegExp(/\S+@\S+\.\S+/).test(email)) {
     setFormErrors("email", "invalid email");
   } else {
@@ -72,3 +85,12 @@ export const validateEmail = (email, setFormErrors) => {
     return true;
   }
 };
+
+// export const validateAvatar = (avatar, setFormErrors) => {
+//   if (avatar === "") {
+//     setFormErrors("avatar", "avatar is missing");
+//   } else {
+//     setFormErrors("avatar", "");
+//     return true;
+//   }
+// };

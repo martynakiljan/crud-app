@@ -4,27 +4,23 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Form from "./Form";
 import Modal from "./Modal";
+import { FormPropsModalType } from "./Form";
 
-const ModalAddUser = ({ isOpen, setIsOpen, updateUserResponseID }) => {
+const ModalAddUser = ({ isOpen, setIsOpen }: FormPropsModalType) => {
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Typography
-        id="fade-modal-dialog-title"
         component="h2"
-        level="inherit"
         fontSize="24px"
         mb="0.25em"
         color="secondary"
         text-align="center"
         width="100%"
       >
-        Edit User:
+        Add User:
       </Typography>
-      <Form
-        updateUserResponseID={updateUserResponseID}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
+
+      <Form isOpen={isOpen} setIsOpen={setIsOpen} />
     </Modal>
   );
 };

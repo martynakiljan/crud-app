@@ -3,11 +3,12 @@ import React from "react";
 import { Stack, Typography, Button } from "@mui/material";
 import ModalAddUser from "./ModalAddUser";
 import { Wrapper } from "../utilis/styledcomponents";
+
 const Container = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
-    <Wrapper>
+    <Wrapper sx={{ minHeight: "100vh" }}>
       <Typography variant="h4" component="h4">
         Users
       </Typography>

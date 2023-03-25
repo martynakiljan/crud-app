@@ -1,3 +1,4 @@
+
 <h1> CRUD Website with React and an External API </h1>
 
 -------
@@ -18,6 +19,7 @@
 
 
 :computer: TECHNOLOGIES :  REACT, NPM, STYLED COMPONENTS, TYPE SCRIPT
+
 
 
 

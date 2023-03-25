@@ -21,45 +21,63 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import deleteUsers from "../API/deleteUsers";
 import ModalRemoveUser from "./ModalRemoveUser";
 import ModalEditUser from "./ModalEditUser";
+import ModalAlert from "./ModalAlert";
+import fetchUserByID from "../API/fetchUserByID";
 
 const TableContent = () => {
   const { users } = useContext(Context);
 
   const [deleteUserResponse, setDeleteUserResponse] = useState(null);
-  const [updateUserResponseID, setUpdateUserResponseID] = useState(null);
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const renderMedia = (avatar) => {
-    return <Avatar justify="center" src={avatar} />;
+  const renderMedia = (avatar: string) => {
+    return <Avatar src={avatar} />;
   };
 
-  const deleteUser = (id) => {
-    console.log(id);
+  const deleteUser = (id: number) => {
     getResponseFromAPI(id);
   };
 
-  const getResponseFromAPI = async (id) => {
+  const getResponseFromAPI = async (id: number) => {
     const response = await deleteUsers(id);
     setDeleteUserResponse(response);
     setIsOpen(true);
   };
 
-  const updateUser = (id) => {
-    setUpdateUserResponseID(id);
-    setIsOpen(true);
+  const fetchUserDetails = async (id: number) => {
+    if (id < 12) {
+      setIsOpenAlert(true);
+    } else {
+      const usersDetailsResponse = await fetchUserByID(id);
+      if (usersDetailsResponse.status === "ok") {
+        setUserData(usersDetailsResponse.user);
+        setIsOpen(true);
+      }
+    }
   };
 
-  const renderButtons = (id) => {
-    console.log(id);
+  const renderButtons = (id: number) => {
     return (
-      <div>
-        <Button variant="text" color="secondary" onClick={(e) => updateUser(e)}>
-          EDIT
-        </Button>
-        <IconButton aria-label="delete" size="large" onClick={(e) => deleteUser(e)}>
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
-      </div>
+      <>
+        <div>
+          <Button
+            variant="text"
+            color="secondary"
+            onClick={() => fetchUserDetails(id)}
+          >
+            EDIT
+          </Button>
+          <IconButton
+            aria-label="delete"
+            size="large"
+            onClick={() => deleteUser(id)}
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+        </div>
+      </>
     );
   };
 
@@ -103,12 +121,14 @@ const TableContent = () => {
           response={deleteUserResponse}
         />
       )}
-      <ModalEditUser
-        updateUserResponseID={updateUserResponseID}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        response={deleteUserResponse}
-      />
+      {userData && (
+        <ModalEditUser
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          userData={userData}
+        />
+      )}
+      <ModalAlert isOpen={isOpenAlert} setIsOpen={setIsOpenAlert} />
     </>
   ) : (
     <Box display="flex" justifyContent="center" alignItems="center">
